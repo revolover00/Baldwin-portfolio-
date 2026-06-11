@@ -18,9 +18,6 @@ export default function Splash({ onComplete }: SplashProps) {
 
   return (
     <motion.div 
-      initial="initial"
-      animate="animate"
-      exit="exit"
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-6 overflow-hidden select-none pointer-events-none"
     >
       {/* 1. Slowly fading solid dark background */}
