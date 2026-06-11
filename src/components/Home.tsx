@@ -40,24 +40,50 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
       video.defaultMuted = true;
       video.setAttribute("muted", "");
       video.setAttribute("playsinline", "");
-      video.load();
       
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn("Browser blocked autoplay, waiting for interaction:", err);
-          // Try playing again on user interaction
-          const handleInteraction = () => {
-            video.play().catch(() => {});
-            document.removeEventListener("click", handleInteraction);
-            document.removeEventListener("touchstart", handleInteraction);
-          };
-          document.addEventListener("click", handleInteraction);
-          document.addEventListener("touchstart", handleInteraction);
+      const playVideo = () => {
+        video.play().catch((err) => {
+          console.warn("Autoplay was blocked or deferred:", err);
         });
-      }
+      };
+
+      // Play immediately
+      playVideo();
+
+      // Listeners for any interaction to override autoplay restrictions
+      const resumePlay = () => {
+        if (videoRef.current) {
+          videoRef.current.play().catch(() => {});
+        }
+        document.removeEventListener("click", resumePlay);
+        document.removeEventListener("touchstart", resumePlay);
+        document.removeEventListener("keydown", resumePlay);
+        document.removeEventListener("scroll", resumePlay);
+      };
+
+      document.addEventListener("click", resumePlay);
+      document.addEventListener("touchstart", resumePlay);
+      document.addEventListener("keydown", resumePlay);
+      document.addEventListener("scroll", resumePlay);
+
+      return () => {
+        document.removeEventListener("click", resumePlay);
+        document.removeEventListener("touchstart", resumePlay);
+        document.removeEventListener("keydown", resumePlay);
+        document.removeEventListener("scroll", resumePlay);
+      };
     }
   }, []);
+
+  // Sync and resume background video play when splash screen is dismissed
+  useEffect(() => {
+    if (!showSplash) {
+      const video = videoRef.current;
+      if (video) {
+        video.play().catch(() => {});
+      }
+    }
+  }, [showSplash]);
 
   // Generate code fragments once on load
   useEffect(() => {
@@ -231,17 +257,19 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
       />
 
       {/* 4. VIDEO HERO BACKGROUND SYSTEM (Absolute positioned behind content) */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+      <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none bg-[#0A0010]">
         <video 
           ref={videoRef}
-          src="/bg-video.mp4" 
           autoPlay 
           muted 
           loop 
           playsInline 
           preload="auto"
-          className="w-full h-full object-cover opacity-100"
-        />
+          className="w-full h-full object-cover opacity-45 transition-opacity duration-1000 ease-in-out font-sans"
+        >
+          <source src="/bg-video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
 
       {/* 5. HERO FOREGROUND CONTENT CANVAS */}
