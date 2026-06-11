@@ -56,7 +56,7 @@ export default function Contact() {
 
       setIsSubmitting(false);
       setIsSuccess(true);
-      const cooldownDuration = 60; // 60 seconds cooldown limit
+      const cooldownDuration = 60 * 60 * 5; // 5 hours cooldown limit (18,000 seconds)
       setCooldown(cooldownDuration);
       localStorage.setItem("contact_cooldown_end", (Date.now() + cooldownDuration * 1000).toString());
       
@@ -133,7 +133,16 @@ export default function Contact() {
               <p className="text-xs text-center" style={{ color: "#A78BCA" }}>
                 Next transmission available in:{" "}
                 <span className="font-bold underline text-sm" style={{ color: "#CC00FF" }}>
-                  {cooldown > 0 ? `${cooldown}s` : "0s (Ready!)"}
+                  {cooldown > 0 ? (
+                    (() => {
+                      const h = Math.floor(cooldown / 3600);
+                      const m = Math.floor((cooldown % 3600) / 60);
+                      const s = cooldown % 60;
+                      if (h > 0) return `${h}h ${m}m ${s}s`;
+                      if (m > 0) return `${m}m ${s}s`;
+                      return `${s}s`;
+                    })()
+                  ) : "0s (Ready!)"}
                 </span>
               </p>
             </div>

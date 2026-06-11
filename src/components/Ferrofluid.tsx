@@ -245,12 +245,26 @@ const Ferrofluid: React.FC<FerrofluidProps> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    const renderer = new Renderer({
-      dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
-      alpha: true,
-      antialias: true
-    });
-    rendererRef.current = renderer;
+    let renderer: Renderer;
+    try {
+      renderer = new Renderer({
+        dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
+        alpha: true,
+        antialias: true
+      });
+      rendererRef.current = renderer;
+    } catch (e) {
+      console.warn("WebGL/OGL initialization failed or unsupported on this device. Engaging graceful layout fallback.", e);
+      const fallbackDiv = document.createElement('div');
+      fallbackDiv.className = "absolute inset-0 bg-radial from-purple-900/10 to-slate-950/40 opacity-40 backdrop-blur-2xl pointer-events-none";
+      container.appendChild(fallbackDiv);
+      return () => {
+        if (fallbackDiv.parentElement === container) {
+          container.removeChild(fallbackDiv);
+        }
+      };
+    }
+
     const gl = renderer.gl;
     const canvas = gl.canvas;
     gl.clearColor(0, 0, 0, 0);
