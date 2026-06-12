@@ -1,110 +1,126 @@
-# 🌌 Baldwin Portfolio
+<div align="center">
 
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white)](https://vite.dev/)
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7B2FBE&height=200&section=header&text=Baldwin%20Portfolio&fontSize=50&fontColor=ECE6F4&animation=fadeIn&fontAlignY=35&desc=Dark%20Fantasy%20Developer%20Portfolio&descAlignY=55&descSize=18" width="100%"/>
 
-A highly polished, dark-themed portfolio single-page application built with React, TypeScript, and TailwindCSS. It integrates immersive visual systems, responsive transitions, and real-time data powered by Supabase.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-CC00FF?style=for-the-badge&logo=vercel&logoColor=white)](https://ais-pre-43hb4ladgt273fbgc6ur3e-105766517539.europe-west3.run.app)
+[![GitHub](https://img.shields.io/badge/GitHub-revolover00-7B2FBE?style=for-the-badge&logo=github&logoColor=white)](https://github.com/revolover00/Baldwin-portfolio-)
+[![License](https://img.shields.io/badge/License-MIT-CC00FF?style=for-the-badge)](LICENSE)
 
----
-
-## 🔗 Live Demo
-[Explore Baldwin Portfolio Live!](https://ais-pre-43hb4ladgt273fbgc6ur3e-105766517539.europe-west3.run.app) *(Placeholder or Preview Link)*
+</div>
 
 ---
 
-## 📷 Screenshots
-*Add your portfolio screenshots here to showcase the beautiful dark-styled landing and interactive pages.*
+## 👤 About &nbsp; ![About](https://img.shields.io/badge/About-Portfolio-CC00FF?style=for-the-badge)
 
-| Desktop Home | Work Showcase |
-| :---: | :---: |
-| _[Screenshot Placeholder]_ | _[Screenshot Placeholder]_ |
+A dark fantasy developer portfolio built with React + TypeScript. Featuring WebGL shaders, particle systems, 3D page transitions, and Supabase backend.
 
 ---
 
-## ⚡ Key Features
+## 🛠️ Tech Stack &nbsp; ![Tech Stack](https://img.shields.io/badge/Stack-Modern-7B2FBE?style=for-the-badge)
 
-- **🌐 Hash-Based SPA Routing:** Lightweight, clean routing implementation using standard `window.location.hash` and `hashchange` browser events.
-- **🎬 Autoplay Hero Background Video:** Optimized to auto-play muted, with explicit overrides for iOS and battery-saver browser restriction states to lock loop activity.
-- **✨ Animated Ember Particle System:** Custom-built HTML5 Canvas floating engine delivering smooth purple and magenta background embers behind key components.
-- **📜 Drifting Code Snippets:** Immersive floating monospace text fragments styled with Framer Motion, ascending gracefully in the hero space.
-- **🌌 Ferrofluid WebGL Interactive Background:** Rich, interactive fluid shader utilizing the high-performance `ogl` WebGL library on secondary pages (`Work`, `About`, `Contact`), disabled on Home to maximize performance.
-- **🔄 Dynamic 3D Page Transitions:** Seamless page transitions leveraging Framer Motion's `AnimatePresence` with spring-loaded `rotateY` perspective shifts.
-- **🔍 Cinematic Project Zoom:** Immersive scale-based transitions that zoom into individual project detail items upon selection.
-- **🗄️ Fully Dynamic Supabase Sync:** Live cloud data fetch for individual projects with a fallback to localized cache state in case of connection limits.
-- **🛡️ Intelligent Contact Cooldown:** Smart contact messaging form submission rate-limiting, restricting user input with a client-persistent 60-second limit stored in `localStorage`.
-- **🚪 Animated Splash Loading Screen:** A professional 2.8-second introductory full-screen loader showcasing the brand logo & a custom animated progress bar.
+<div align="center">
+
+![React](https://img.shields.io/badge/React-19-CC00FF?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-7B2FBE?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6-CC00FF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-7B2FBE?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12-CC00FF?style=for-the-badge&logo=framer&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-2-7B2FBE?style=for-the-badge&logo=supabase&logoColor=white)
+![Vercel](https://img.shields.io/badge/Deployed-Vercel-CC00FF?style=for-the-badge&logo=vercel&logoColor=white)
+
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+## ✨ Features &nbsp; ![Features](https://img.shields.io/badge/Features-Rich-CC00FF?style=for-the-badge)
 
-| Tech | Category | Description |
+- **Hash-based SPA routing** (no React Router) — `#home`, `#work`, `#about`, `#contact`, `#project/:id`
+- **Background video hero** with forced autoplay for iOS/mobile compatibility
+- **HTML5 Canvas ember particle system** (purple/magenta floating particles)
+- **Floating monospace code snippets** drifting upward with Framer Motion
+- **Ferrofluid WebGL interactive background shader** on subpages (using `ogl` library)
+- **3D page transitions** using `rotateY` spring animation with `AnimatePresence`
+- **Cinematic zoom transition** for project detail pages
+- **Supabase integration** — projects (public SELECT) and messages (public INSERT)
+- **Contact form** with 60-second localStorage rate limiting
+- **2.8-second animated Splash screen** before app renders
+- **Responsive design** — mobile + desktop
+
+---
+
+## 📁 Project Structure &nbsp; ![Structure](https://img.shields.io/badge/Structure-Clean-7B2FBE?style=for-the-badge)
+
+```text
+src/
+├── components/
+│   ├── App.tsx           — Root component, routing, layout
+│   ├── Home.tsx          — Hero, video, particles, sword SVG
+│   ├── Work.tsx          — Projects grid from Supabase
+│   ├── About.tsx         — Skills, stats, social links, mission
+│   ├── Contact.tsx       — Contact form with rate limiting
+│   ├── ProjectDetail.tsx — Individual project page
+│   ├── Header.tsx        — Fixed nav header
+│   ├── Splash.tsx        — Loading screen
+│   └── Ferrofluid.tsx    — WebGL shader background
+├── store.ts              — Supabase data layer + cache
+├── types.ts              — TypeScript interfaces
+└── integrations/
+    └── supabase/
+        ├── client.ts     — Supabase client init
+        └── types.ts      — DB types
+public/
+├── logo.webp             — Logo (add manually)
+└── bg-video.mp4          — Background video (add manually)
+```
+
+---
+
+## 🚀 Getting Started &nbsp; ![Setup](https://img.shields.io/badge/Getting_Started-Run-CC00FF?style=for-the-badge)
+
+To deploy or develop locally:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/revolover00/Baldwin-portfolio-.git
+   cd Baldwin-portfolio-
+   ```
+
+2. **Install all workspace dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure your environment keys:**
+   Copy the `.env.example` file to `.env` and fill in your Supabase connection strings:
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Boot the Vite dev server:**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🔐 Environment Variables &nbsp; ![Variables](https://img.shields.io/badge/Environment-Keys-7B2FBE?style=for-the-badge)
+
+| Variable | Description | Example |
 | :--- | :--- | :--- |
-| **React 19** | Component Framework | Modern UI framework utilizing functional Hooks. |
-| **TypeScript** | Language Type-Safety | Strict typing and interfaces for bug-free development. |
-| **TailwindCSS** | Design styling | Highly customized dark color palettes, layout bounds. |
-| **Framer Motion (`motion/react`)** | Animations | Controls transition loops, 3D rotations, and drift items. |
-| **OGL** | Interactive WebGL | Executes fluid WebGL particle physics & shader buffers. |
-| **Supabase Client SDK** | Database Integration | Authenticates connection strings to query dynamic items. |
+| `VITE_SUPABASE_URL` | Your Supabase project URL API gateway address | `https://xxxx.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | Your Supabase anon/public role credentials token | `eyJ...` |
 
 ---
 
-## 🚀 Getting Started
+## 🗄️ Supabase Setup &nbsp; ![Database](https://img.shields.io/badge/Supabase-Backend-CC00FF?style=for-the-badge)
 
-Follow these steps to set up and run the portfolio locally on your machine.
+<details>
+<summary>🔑 Click to expand Database Schemas & Row Level Security SQL</summary>
 
-### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed (v18+ recommended).
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/baldwin-portfolio.git
-cd baldwin-portfolio
-```
-
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Setup Environment Variables
-Create a `.env` file in the root directory and copy the format from `.env.example`:
-```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### 4. Run Development Server
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
----
-
-## 🔐 Environment Variables
-
-The application expects the following client-side environment variables loaded by Vite:
-
-| Key | Description | Type |
-| :--- | :--- | :--- |
-| `VITE_SUPABASE_URL` | The public API gateway URL of your Supabase project instance | String |
-| `VITE_SUPABASE_ANON_KEY` | The public secure anonymous access token key to access tables | String |
-
----
-
-## 🗄️ Supabase Setup
-
-This application relies on two public tables hosted on a PostgreSQL Supabase database instance. Set them up with the following schemas and write-access rules:
-
-### 1. Table: `projects`
-This table holds the structure for dynamic work items displayed under `#work`.
+### 1. Table Creation DDL
 
 ```sql
+-- Create projects table
 CREATE TABLE projects (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
@@ -117,13 +133,8 @@ CREATE TABLE projects (
   gallery JSONB,
   createdAt BIGINT
 );
-```
-> **RLS Policy:** Enable Read Row Security to allow public reading anonymously (`true`).
 
-### 2. Table: `messages`
-This table collects contacts and feedback notes gathered via `#contact`.
-
-```sql
+-- Create contact messages table
 CREATE TABLE messages (
   id TEXT PRIMARY KEY,
   senderEmail TEXT NOT NULL,
@@ -133,60 +144,60 @@ CREATE TABLE messages (
   createdAt BIGINT
 );
 ```
-> **RLS Policy:** Enable secure writing to allow public anonymous insertion (`anon` role allowed to insert only).
 
----
+### 2. Row Level Security (RLS) Configuration
 
-## 📂 Project Structure
+Configure row access rules to let public visitors select projects and insert messages:
 
-Key structure maps for the core application components:
+```sql
+-- Enable RLS on both tables
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 
-```text
-├── public/
-│   ├── logo.webp          # Branding logo (Needs to be added manually)
-│   ├── bg-video.mp4       # Autoplay ambient video clip (Needs to be added manually)
-├── src/
-│   ├── components/
-│   │   ├── About.tsx      # Social grid, skills stats, glowing card
-│   │   ├── Contact.tsx    # Cooldown-guarded email submission form
-│   │   ├── Header.tsx     # Absolutely centered layout bar
-│   │   ├── Home.tsx       # Hero, code snippets, local SVG sword
-│   │   ├── ProjectDetail.tsx # Media showcase & cinematic transitions
-│   │   ├── Splash.tsx     # Logo intro & visual sequence elements
-│   │   └── Work.tsx       # Category grid syncing Supabase fetch
-│   ├── integrations/
-│   │   └── supabase/      # Main db configuration client
-│   ├── App.tsx            # Context core & SPA hash selector
-│   ├── index.css          # Customized typography settings (Rye & Inter)
-│   ├── main.tsx           # Dom entry mount point instance
-│   └── store.ts           # Global store & cached database structures
+-- Allow anonymous select on projects
+CREATE POLICY "Allow public select" 
+ON projects FOR SELECT 
+TO anon 
+USING (true);
+
+-- Allow anonymous insert on messages
+CREATE POLICY "Allow anonymous insert" 
+ON messages FOR INSERT 
+TO anon 
+WITH CHECK (true);
 ```
 
----
-
-## 📦 Deployment on Vercel
-
-To deploy your portfolio to Vercel:
-
-1. Push your local codebase changes to a GitHub repository.
-2. Sign in to your [Vercel Dashboard](https://vercel.com/) and click **Add New Project**.
-3. Import your repository.
-4. Set the **Framework Preset** to `Vite`.
-5. Under **Environment Variables**, configure your production keys:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-6. Click **Deploy**. Vercel will build your static SPA and deploy it securely.
+</details>
 
 ---
 
-## ⚠️ Known Issues
+## ⚠️ Known Issues &nbsp; ![Issues](https://img.shields.io/badge/Known_Issues-Review-7B2FBE?style=for-the-badge)
 
-- **Asset Dependencies:** `logo.webp` and `bg-video.mp4` assets are required for full rendering and must be manually placed inside the `/public/` directory, as they are excluded from Git tracing by default.
-- **Cool-down Guard Parameter:** Contact form rate-limiting cooldown limits are hardcoded to 60 seconds inside storage for demo responsiveness, rather than 5 hours.
-- **Unused Packages:** The `@google/genai` library is currently integrated in packages but remains unused by core layout routines.
+> ⚠️ **IMPORTANT DEVELOPMENT ACCENTS**
+> - **Asset Requirements:** `logo.webp` and `bg-video.mp4` contain tailored branding and need to be placed manually inside the `/public/` assets directory before compiling as they are git-ignored.
+> - **Contact Rate Limiting:** The contact messaging cooldown period is configured at 60 seconds stored inside `localStorage` for responsive debugging, which should be scaled to a 5-hour limit for final deployment.
+> - **Unused Package Engine:** The `@google/genai` library is currently fully installed in dependencies but remains unused in layouts; it can easily be pruned from packaging.
+> - **Shader Rendering Limits:** The interactive WebGL Ferrofluid shader relies on modern browser canvas configurations and might not render smoothly across all legacy mobile engines (no fallback gradient is programmed).
 
 ---
 
-## 📄 License
+## 🔗 Social Links &nbsp; ![Socials](https://img.shields.io/badge/Socials-Connect-CC00FF?style=for-the-badge)
 
-This project is licensed under the [MIT License](LICENSE).
+<div align="center">
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-revolover00-7B2FBE?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/revo-code-6181283b5)
+[![YouTube](https://img.shields.io/badge/YouTube-@Revo--code-CC00FF?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@Revo-code)
+[![X](https://img.shields.io/badge/X-@revo__codes-7B2FBE?style=for-the-badge&logo=x&logoColor=white)](https://x.com/revo_codes)
+
+</div>
+
+---
+
+## 📄 License &nbsp; ![License](https://img.shields.io/badge/License-MIT-7B2FBE?style=for-the-badge)
+
+Licensed under the [MIT License](LICENSE).  
+Copyright © 2025 Baldwin Portfolio.
+
+---
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=7B2FBE&height=120&section=footer" width="100%"/>
