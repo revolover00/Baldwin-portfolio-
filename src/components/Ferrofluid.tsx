@@ -381,10 +381,11 @@ const Ferrofluid: React.FC<FerrofluidProps> = ({
       callIfFn(meshRef.current, 'remove');
       // renderer version check or call
       if (rendererRef.current) {
-        if (typeof rendererRef.current.destroy === 'function') {
-          rendererRef.current.destroy();
-        } else if (typeof rendererRef.current.dispose === 'function') {
-          (rendererRef.current as any).dispose();
+        const r = rendererRef.current as any;
+        if (typeof r.destroy === 'function') {
+          r.destroy();
+        } else if (typeof r.dispose === 'function') {
+          r.dispose();
         }
       }
       programRef.current = null;

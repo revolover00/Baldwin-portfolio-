@@ -35,7 +35,7 @@ export default function Work({ onNavigate }: WorkProps) {
         staggerChildren: 0.15,
       },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -47,7 +47,7 @@ export default function Work({ onNavigate }: WorkProps) {
         ease: "easeOut",
       },
     },
-  };
+  } as const;
 
   if (isLoading) {
     return (

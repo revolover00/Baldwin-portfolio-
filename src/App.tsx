@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -10,6 +10,7 @@ import Splash from "./components/Splash";
 import Ferrofluid from "./components/Ferrofluid";
 import { Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
 import { Store } from "./store";
+import Lenis from "lenis";
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -60,9 +61,69 @@ export default function App() {
     window.location.hash = targetHash;
   };
 
+  const lenisRef = useRef<Lenis | null>(null);
+
+  useEffect(() => {
+    // Instantiate Lenis for liquid-smooth momentum navigation physics
+    const lenis = new Lenis({
+      duration: 1.3, // Weighted luxury deceleration
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration ease
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
+      infinite: false,
+    });
+
+    lenisRef.current = lenis;
+
+    // Reset scroll progress CSS variable
+    document.documentElement.style.setProperty("--scroll-progress", "0");
+
+    lenis.on("scroll", (e) => {
+      // Map progress smoothly into CSS custom property for render-free 120fps progress monitoring
+      document.documentElement.style.setProperty("--scroll-progress", `${e.progress}`);
+    });
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+
+    const handleResize = () => {
+      lenis.resize();
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", handleResize);
+      lenis.destroy();
+    };
+  }, []);
+
+  // Sync scroll to top instantly on page transitions, then resize Lenis to new layout heights
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+      document.documentElement.style.setProperty("--scroll-progress", "0");
+      
+      const timer = setTimeout(() => {
+        if (lenisRef.current) {
+          lenisRef.current.resize();
+        }
+      }, 350); // slight offset allowing transitions to finish mounting
+      return () => clearTimeout(timer);
+    }
+  }, [route]);
+
   return (
     <div 
-      className="min-h-screen text-[#ECE6F4] relative flex flex-col overflow-hidden pb-16 selection:bg-purple-500/30 selection:text-[#ECE6F4]"
+      className="min-h-screen text-[#ECE6F4] relative flex flex-col overflow-x-hidden pb-16 selection:bg-purple-500/30 selection:text-[#ECE6F4]"
       style={{
         backgroundColor: "#0A0010",
         fontFamily: "'Inter', sans-serif"
@@ -117,9 +178,6 @@ export default function App() {
                 mouseInteraction
                 mouseStrength={1}
                 mouseRadius={0.35}
-                color1="#795c95"
-                color2="#A855F7"
-                color3="#A855F7"
                 paused={route.tab === "home"}
               />
             </div>

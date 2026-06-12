@@ -43,14 +43,15 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
       
       const playVideo = () => {
         video.play().catch((err) => {
-          console.warn("Autoplay was blocked or deferred:", err);
+          // Log only as debug-level to avoid polluting console with standard battery-saver or power-saving browser states
+          console.debug("Autoplay deferred or handled silently:", err);
         });
       };
 
       // Play immediately
       playVideo();
 
-      // Listeners for any interaction to override autoplay restrictions
+      // Listeners for any interaction/focus to override autoplay restrictions and keep loop active
       const resumePlay = () => {
         if (videoRef.current) {
           videoRef.current.play().catch(() => {});
@@ -61,16 +62,32 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
         document.removeEventListener("scroll", resumePlay);
       };
 
+      const handleVisibility = () => {
+        if (document.visibilityState === "visible" && videoRef.current) {
+          videoRef.current.play().catch(() => {});
+        }
+      };
+
+      const handleFocus = () => {
+        if (videoRef.current) {
+          videoRef.current.play().catch(() => {});
+        }
+      };
+
       document.addEventListener("click", resumePlay);
       document.addEventListener("touchstart", resumePlay);
       document.addEventListener("keydown", resumePlay);
       document.addEventListener("scroll", resumePlay);
+      document.addEventListener("visibilitychange", handleVisibility);
+      window.addEventListener("focus", handleFocus);
 
       return () => {
         document.removeEventListener("click", resumePlay);
         document.removeEventListener("touchstart", resumePlay);
         document.removeEventListener("keydown", resumePlay);
         document.removeEventListener("scroll", resumePlay);
+        document.removeEventListener("visibilitychange", handleVisibility);
+        window.removeEventListener("focus", handleFocus);
       };
     }
   }, []);
@@ -193,7 +210,7 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen text-[#ECE6F4] flex flex-col justify-start overflow-hidden pb-24 select-none">
+    <div className="relative min-h-screen text-[#ECE6F4] flex flex-col justify-start overflow-x-hidden pb-24 select-none">
       
       {/* 4. VIDEO HERO BACKGROUND SYSTEM (Absolute positioned behind content and fully clean) */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
@@ -213,7 +230,7 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
 
       {/* 5. HERO FOREGROUND CONTENT CANVAS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
-        <div className="pt-[140px] md:pt-[160px] pb-12 max-w-3xl text-left">
+        <div className="pt-[140px] md:pt-[160px] pb-12 max-w-3xl text-left flex flex-col gap-6">
           
           {/* LARGE MAIN HEADER */}
           <motion.div
@@ -373,6 +390,7 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
           </motion.div>
 
         </div>
+
       </div>
     </div>
   );
