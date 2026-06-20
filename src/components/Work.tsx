@@ -64,7 +64,7 @@ export default function Work({ onNavigate }: WorkProps) {
   }
 
   return (
-    <div id="work-page" className="relative min-h-screen px-4 pt-[110px] md:pt-[130px] pb-12 md:px-8 max-w-7xl mx-auto z-10">
+    <div id="work" className="relative min-h-screen px-4 pt-24 md:pt-32 pb-24 md:px-8 max-w-7xl mx-auto z-10">
       {/* Page Title Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -117,35 +117,29 @@ export default function Work({ onNavigate }: WorkProps) {
               key={project.id}
               variants={itemVariants}
               whileHover={{ 
-                y: -4,
-                boxShadow: "0 0 30px rgba(204, 0, 255, 0.12)"
+                y: -8,
+                boxShadow: "0 25px 55px -10px rgba(204, 0, 255, 0.35), 0 0 25px 2px rgba(204, 0, 255, 0.18)"
               }}
-              whileTap={{ scale: 0.95 }}
-              className="group rounded-xl border flex flex-col overflow-hidden transition-all duration-300 backdrop-blur-sm cursor-pointer"
+              whileTap={{ scale: 0.96 }}
+              className="group/card rounded-xl border flex flex-col overflow-hidden relative backdrop-blur-sm cursor-pointer transition-all duration-500 ease-out"
               style={{
                 backgroundColor: "rgba(10, 0, 16, 0.8)",
                 borderColor: "rgba(123, 47, 190, 0.2)",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(204, 0, 255, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(123, 47, 190, 0.2)";
-              }}
               onClick={() => onNavigate(`#project/${project.id}`)}
             >
               {/* Card Media Preview */}
-              <div className="relative aspect-video w-full overflow-hidden bg-[#0A0010] flex items-center justify-center">
+              <div className="relative aspect-video w-full overflow-hidden bg-[#0A0010] flex items-center justify-center z-10">
                 {project.mediaUrl ? (
                   <img
                     src={project.mediaUrl}
                     alt={project.title}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center">
-                    <Video size={40} className="text-[#6B4F8A]/30 transition-colors duration-300 group-hover:text-[#7B2FBE]/50" />
+                    <Video size={40} className="text-[#6B4F8A]/30 transition-colors duration-300 group-hover/card:text-[#7B2FBE]/50" />
                   </div>
                 )}
                 
@@ -207,11 +201,19 @@ export default function Work({ onNavigate }: WorkProps) {
                 </div>
 
                 {/* Footer interactive prompt */}
-                <div className="flex items-center text-xs font-bold uppercase tracking-wider group-hover:translate-x-1 transition-transform duration-300 mt-auto" style={{ color: "#CC00FF" }}>
+                <div className="flex items-center text-xs font-bold uppercase tracking-wider group-hover/card:translate-x-1 transition-transform duration-300 mt-auto z-20" style={{ color: "#CC00FF" }}>
                   <span className="mr-1.5">View Project Details</span>
                   <ArrowRight size={14} />
                 </div>
               </div>
+
+              {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.15)_0%,transparent_75%)] pointer-events-none z-10"
+              />
+
+              {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+              <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-xl transition-colors pointer-events-none duration-500 z-30" />
             </motion.div>
           ))}
         </motion.div>

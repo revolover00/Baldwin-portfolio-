@@ -8,7 +8,7 @@ import Contact from "./components/Contact";
 import ProjectDetail from "./components/ProjectDetail";
 import Splash from "./components/Splash";
 import Ferrofluid from "./components/Ferrofluid";
-import { Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
+import { Twitter, Linkedin, Youtube, Github } from "lucide-react";
 import { Store } from "./store";
 import Lenis from "lenis";
 
@@ -16,13 +16,12 @@ export default function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [route, setRoute] = useState(() => {
     const hash = window.location.hash || "#home";
-    if (hash === "#home" || hash === "#") return { tab: "home", projectId: "" };
-    if (hash === "#about") return { tab: "about", projectId: "" };
-    if (hash === "#contact") return { tab: "contact", projectId: "" };
-    if (hash === "#work") return { tab: "work", projectId: "" };
     if (hash.startsWith("#project/")) return { tab: "project", projectId: hash.substring(9) };
     return { tab: "home", projectId: "" };
   });
+
+  const [activeTab, setActiveTab] = useState("home");
+  const lenisRef = useRef<Lenis | null>(null);
 
   // Pre-load work projects immediately so that they are loaded on any page
   useEffect(() => {
@@ -34,34 +33,58 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash || "#home";
-      if (hash === "#home" || hash === "#") {
-        setRoute({ tab: "home", projectId: "" });
-      } else if (hash === "#work") {
-        setRoute({ tab: "work", projectId: "" });
-      } else if (hash === "#about") {
-        setRoute({ tab: "about", projectId: "" });
-      } else if (hash === "#contact") {
-        setRoute({ tab: "contact", projectId: "" });
-      } else if (hash.startsWith("#project/")) {
+      if (hash.startsWith("#project/")) {
         setRoute({ tab: "project", projectId: hash.substring(9) });
       } else {
-        setRoute({ tab: "home", projectId: "" });
+        const tabName = hash.replace("#", "") || "home";
+        if (route.tab === "project") {
+          setRoute({ tab: "home", projectId: "" });
+        }
+        setActiveTab(tabName);
       }
     };
 
     window.addEventListener("hashchange", handleHashChange);
-    // Sync hash initially if empty
     if (!window.location.hash) {
       window.location.hash = "#home";
     }
     return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+  }, [route.tab]);
 
   const navigateToRoute = (targetHash: string) => {
-    window.location.hash = targetHash;
-  };
+    if (targetHash.startsWith("#project/")) {
+      const pId = targetHash.substring(9);
+      setRoute({ tab: "project", projectId: pId });
+      window.location.hash = targetHash;
+      return;
+    }
 
-  const lenisRef = useRef<Lenis | null>(null);
+    const tab = targetHash.replace("#", "") || "home";
+    
+    if (route.tab === "project") {
+      setRoute({ tab: "home", projectId: "" });
+      window.location.hash = targetHash;
+      
+      setTimeout(() => {
+        const element = document.getElementById(tab);
+        if (element && lenisRef.current) {
+          lenisRef.current.scrollTo(element, {
+            duration: 1.4,
+            offset: -80,
+          });
+        }
+      }, 150);
+    } else {
+      window.location.hash = targetHash;
+      const element = document.getElementById(tab);
+      if (element && lenisRef.current) {
+        lenisRef.current.scrollTo(element, {
+          duration: 1.4,
+          offset: -80,
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     // Instantiate Lenis for liquid-smooth momentum navigation physics
@@ -105,28 +128,64 @@ export default function App() {
     };
   }, []);
 
-  // Sync scroll to top instantly on page transitions, then resize Lenis to new layout heights
+  // Sync scroll to top or target hash on mount
   useEffect(() => {
-    window.scrollTo(0, 0);
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-      document.documentElement.style.setProperty("--scroll-progress", "0");
-      
-      const timer = setTimeout(() => {
-        if (lenisRef.current) {
-          lenisRef.current.resize();
-        }
-      }, 350); // slight offset allowing transitions to finish mounting
-      return () => clearTimeout(timer);
+    if (!showSplash && route.tab !== "project") {
+      const initialHash = window.location.hash.replace("#", "");
+      if (initialHash && ["home", "work", "about", "contact"].includes(initialHash)) {
+        const timer = setTimeout(() => {
+          const el = document.getElementById(initialHash);
+          if (el && lenisRef.current) {
+            lenisRef.current.scrollTo(el, { duration: 0.1, offset: -80, immediate: true });
+          }
+        }, 150);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [route]);
+  }, [showSplash, route.tab]);
+
+  // Viewport Intersection Observer to highlight Header nav dynamically during scrolling
+  useEffect(() => {
+    if (route.tab === "project") return;
+
+    const sections = ["home", "work", "about", "contact"];
+    const observerOptions = {
+      root: null,
+      rootMargin: "-45% 0px -40% 0px", // Trigger when center focus passes
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id;
+          setActiveTab(sectionId);
+          window.history.replaceState(null, "", `#${sectionId}`);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    const timer = setTimeout(() => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }, 800);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [route.tab]);
 
   return (
     <div 
-      className="min-h-screen text-[#ECE6F4] relative flex flex-col overflow-x-hidden pb-16 selection:bg-purple-500/30 selection:text-[#ECE6F4]"
+      className="min-h-screen text-[#ECE6F4] relative flex flex-col overflow-x-hidden pb-16 selection:bg-[#CC00FF]/20 selection:text-white"
       style={{
-        backgroundColor: "#0A0010",
-        fontFamily: "'Inter', sans-serif"
+        backgroundColor: "#06010A",
+        fontFamily: "'Plus Jakarta Sans', sans-serif"
       }}
     >
       <AnimatePresence>
@@ -136,21 +195,20 @@ export default function App() {
       </AnimatePresence>
 
       <div className="min-h-screen relative flex flex-col w-full">
-            {/* Structural background elements: Global dynamic grid backplane - only for Home page */}
-            {route.tab === "home" && (
-              <>
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(123,47,190,0.15),rgba(10,0,16,0))] pointer-events-none -z-20" />
-                <div 
-                  className="absolute inset-0 pointer-events-none opacity-[0.015] -z-20" 
-                  style={{
-                    backgroundImage: `radial-gradient(#ECE6F4 1px, transparent 1px)`,
-                    backgroundSize: "24px 24px"
-                  }}
-                />
-              </>
-            )}
+            {/* Sophisticated, muted radial background glows */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(140,90,250,0.08),transparent)] pointer-events-none -z-20" />
+            <div className="absolute top-[80vh] right-0 w-[60vw] h-[60vh] bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.03),transparent_70%)] pointer-events-none -z-20" />
 
-            {/* Custom Ferrofluid interactive background shader for inner subpages */}
+            {/* Subtle global grid lines overlay for depth */}
+            <div 
+              className="absolute inset-0 pointer-events-none opacity-[0.008] -z-20 animate-fade-in" 
+              style={{
+                backgroundImage: `radial-gradient(#ECE6F4 1px, transparent 1px)`,
+                backgroundSize: "32px 32px"
+              }}
+            />
+
+            {/* Custom Ferrofluid interactive background shader */}
             <div 
               style={{ 
                 width: '100%', 
@@ -159,151 +217,191 @@ export default function App() {
                 overflow: 'hidden', 
                 pointerEvents: 'none', 
                 zIndex: 0,
-                opacity: route.tab !== "home" ? 1 : 0,
-                transition: "opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
+                opacity: route.tab === "project" ? 0.85 : 0.25,
+                transition: "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)"
               }}
             >
               <Ferrofluid
                 colors={['#8B5CF6', '#C084FC', '#F3E8FF']}
-                speed={0.5}
-                scale={1.6}
-                turbulence={1}
-                fluidity={0.1}
-                rimWidth={0.2}
-                sharpness={2.5}
-                shimmer={1.35}
-                glow={2}
+                speed={0.4}
+                scale={1.5}
+                turbulence={0.9}
+                fluidity={0.12}
+                rimWidth={0.25}
+                sharpness={2.2}
+                shimmer={1.2}
+                glow={1.8}
                 flowDirection="down"
                 opacity={1}
                 mouseInteraction
                 mouseStrength={1}
                 mouseRadius={0.35}
-                paused={route.tab === "home"}
+                paused={showSplash}
               />
             </div>
 
-            {/* Render header if not in deep full project screen or keep it global */}
-            <Header currentTab={route.tab} onNavigate={navigateToRoute} showSplash={showSplash} />
+            {/* Render header targeting the dynamically monitored active tab */}
+            <Header 
+              currentTab={route.tab === "project" ? "work" : activeTab} 
+              onNavigate={navigateToRoute} 
+              showSplash={showSplash} 
+            />
 
-            {/* Primary content router with smooth 3D book page-flip transitions for pages and luxurious zoom-in for project details */}
-            <div 
-              className="flex-grow relative z-10 w-full" 
-              style={
-                route.tab !== "project" 
-                  ? { perspective: "2500px", transformStyle: "preserve-3d" } 
-                  : undefined
-              }
-            >
+            {/* Primary Content Container */}
+            <div className="flex-grow relative z-10 w-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`${route.tab}-${route.projectId}`}
                   initial={
                     route.tab === "project"
-                      ? { opacity: 0, scale: 0.5, rotateY: 0, x: 0 }
-                      : { opacity: 0, rotateY: 12, x: 25, scale: 0.98 }
+                      ? { opacity: 0, scale: 0.95 }
+                      : { opacity: 0 }
                   }
-                  animate={{ opacity: 1, rotateY: 0, x: 0, scale: 1 }}
+                  animate={{ opacity: 1, scale: 1 }}
                   exit={
                     route.tab === "project"
-                      ? { opacity: 0, scale: 0.5, rotateY: 0, x: 0 }
-                      : { opacity: 0, rotateY: -12, x: -25, scale: 0.98 }
+                      ? { opacity: 0, scale: 0.95 }
+                      : { opacity: 0 }
                   }
-                  transition={
-                    route.tab === "project"
-                      ? {
-                          duration: 0.75,
-                          ease: [0.16, 1, 0.3, 1] // Immersive high-end cinematic ease
-                        }
-                      : {
-                          duration: 0.75,
-                          ease: [0.16, 1, 0.3, 1], // Exquisite custom liquid-smooth ease-out
-                          rotateY: { type: "spring", stiffness: 50, damping: 16 } // Soft, weighted book cover inertia
-                        }
-                  }
-                  style={
-                    route.tab === "project"
-                      ? {
-                          transformOrigin: "center center"
-                        }
-                      : {
-                          transformOrigin: "center center",
-                          backfaceVisibility: "hidden",
-                          transformStyle: "preserve-3d",
-                        }
-                  }
+                  transition={{
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1]
+                  }}
                   className="w-full h-full"
                 >
-                  {route.tab === "home" && <Home onNavigate={navigateToRoute} showSplash={showSplash} />}
-                  {route.tab === "work" && <Work onNavigate={navigateToRoute} />}
-                  {route.tab === "about" && <About />}
-                  {route.tab === "contact" && <Contact />}
-                  {route.tab === "project" && (
+                  {route.tab !== "project" ? (
+                    <div className="flex flex-col w-full relative">
+                      <Home onNavigate={navigateToRoute} showSplash={showSplash} />
+                      
+                      {/* Premium separator line */}
+                      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none">
+                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
+                      </div>
+
+                      <Work onNavigate={navigateToRoute} />
+
+                      {/* Premium separator line */}
+                      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none">
+                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
+                      </div>
+
+                      <About />
+
+                      {/* Premium separator line */}
+                      <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none">
+                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
+                      </div>
+
+                      <Contact />
+                    </div>
+                  ) : (
                     <ProjectDetail projectId={route.projectId} onNavigate={navigateToRoute} />
                   )}
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Fixed to Bottom of Page layout-friendly Premium Footer */}
+            {/* Fixed to Bottom Premium Footer */}
             <footer 
-              className="fixed bottom-0 left-0 right-0 z-40 py-4 backdrop-blur-md border-t text-xs relative"
+              className="py-8 border-t text-xs relative z-40"
               style={{
-                borderColor: "rgba(123, 47, 190, 0.15)",
-                backgroundColor: "rgba(10, 0, 16, 0.85)"
+                borderColor: "rgba(123, 47, 190, 0.12)",
+                backgroundColor: "rgba(6, 1, 10, 0.9)",
+                backdropFilter: "blur(16px)",
+                WebkitBackdropFilter: "blur(16px)"
               }}
             >
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[#6B4F8A]">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-6">
                 
-                {/* Left Column: Social Media Trigger Icons */}
-                <div className="flex items-center space-x-6">
-                  <a 
-                    href="https://twitter.com" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="hover:text-[#E8D5F5] transition-colors duration-200"
-                    aria-label="X (Twitter)"
-                  >
-                    <Twitter size={15} />
-                  </a>
-                  <a 
-                    href="https://linkedin.com" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="hover:text-[#E8D5F5] transition-colors duration-200"
-                    aria-label="LinkedIn"
-                  >
-                    <Linkedin size={15} />
-                  </a>
-                  <a 
-                    href="https://instagram.com" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="hover:text-[#E8D5F5] transition-colors duration-200"
-                    aria-label="Instagram"
-                  >
-                    <Instagram size={15} />
-                  </a>
-                  <a 
-                    href="https://youtube.com" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="hover:text-[#E8D5F5] transition-colors duration-200"
-                    aria-label="YouTube"
-                  >
-                    <Youtube size={15} />
-                  </a>
+                {/* Logo Section - Large, clear and suitable */}
+                <div 
+                  onClick={() => navigateToRoute("#home")}
+                  className="flex flex-col items-center space-y-4 group cursor-pointer select-none py-4"
+                >
+                  <div className="h-28 sm:h-36 md:h-40 flex items-center justify-center">
+                    <img 
+                      src="/logo.webp" 
+                      alt="Baldwin Portfolio Logo" 
+                      className="h-28 sm:h-36 md:h-40 w-auto object-contain transition-all duration-300 group-hover:scale-[1.04] filter drop-shadow-[0_0_30px_rgba(204,0,255,0.25)]"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = document.getElementById("footer-logo-fallback");
+                        if (fallback) fallback.style.display = "flex";
+                      }}
+                    />
+                    {/* Fallback typography with glowing text */}
+                    <div 
+                      id="footer-logo-fallback" 
+                      className="hidden flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4 md:gap-5"
+                    >
+                      <span className="text-5xl sm:text-6xl md:text-7xl font-black font-display uppercase tracking-wider text-[#CC00FF] [text-shadow:0_0_30px_rgba(204,0,255,0.7)]">
+                        B
+                      </span>
+                      <span className="text-xl sm:text-2xl md:text-3xl font-extrabold font-display tracking-[0.4em] sm:tracking-[0.5em] text-[#E8D5F5] uppercase">
+                        BALDWIN
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[#A78BCA]/50 font-mono text-center">
+                    Creative Developer & Architect
+                  </span>
                 </div>
 
-                {/* Right Column: Copyright and policy channels */}
-                <div className="flex flex-wrap items-center justify-center gap-4">
-                  <div className="font-mono text-[10px] tracking-wider uppercase">
-                    © {new Date().getFullYear()} Baldwin Portfolio. MIT
+                {/* Separator line */}
+                <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#CC00FF]/10 to-transparent my-1" />
+
+                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-[#A78BCA]/60">
+                  {/* Left Column: Social Links */}
+                  <div className="flex items-center space-x-6">
+                    <a 
+                      href="https://github.com/revolover00/" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="hover:text-white transition-colors duration-200"
+                      aria-label="GitHub"
+                    >
+                      <Github size={15} />
+                    </a>
+                    <a 
+                      href="https://x.com/revo_codes" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="hover:text-white transition-colors duration-200"
+                      aria-label="X (Twitter)"
+                    >
+                      <Twitter size={15} />
+                    </a>
+                    <a 
+                      href="https://www.linkedin.com/in/revo-code-6181283b5" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="hover:text-white transition-colors duration-190"
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin size={15} />
+                    </a>
+                    <a 
+                      href="https://www.youtube.com/@Revo-code" 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      className="hover:text-white transition-colors duration-200"
+                      aria-label="YouTube"
+                    >
+                      <Youtube size={15} />
+                    </a>
                   </div>
-                  <span className="text-[#6B4F8A]/30 hidden sm:inline">•</span>
-                  <div className="flex space-x-3 text-[10px] font-mono tracking-wider uppercase">
-                    <span className="hover:text-[#E8D5F5] transition-colors cursor-pointer">Privacy</span>
-                    <span>/</span>
-                    <span className="hover:text-[#E8D5F5] transition-colors cursor-pointer">Terms</span>
+
+                  {/* Right Column: Copyright */}
+                  <div className="flex flex-wrap items-center justify-center gap-4">
+                    <div className="font-mono text-[10px] tracking-wider uppercase text-[#A78BCA]/45">
+                      © {new Date().getFullYear()} Baldwin Portfolio. MIT
+                    </div>
+                    <span className="text-[#A78BCA]/20 hidden sm:inline">•</span>
+                    <div className="flex space-x-3 text-[10px] font-mono tracking-wider uppercase text-[#A78BCA]/45">
+                      <span className="hover:text-white transition-colors cursor-pointer">Privacy</span>
+                      <span>/</span>
+                      <span className="hover:text-white transition-colors cursor-pointer">Terms</span>
+                    </div>
                   </div>
                 </div>
 

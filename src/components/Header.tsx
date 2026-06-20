@@ -36,13 +36,13 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
         {/* Left Side: Logo (src="/logo.webp") */}
         <div 
           onClick={() => handleNavClick("#home")}
-          className="flex items-center cursor-pointer z-10 group min-w-[120px] h-8 relative"
+          className="flex items-center cursor-pointer z-10 group min-w-[140px] h-12 sm:h-14 relative"
         >
           {!logoFailed ? (
             !showSplash && (
               <motion.div 
                 layoutId="header-logo"
-                className="h-8 flex items-center justify-center"
+                className="h-12 sm:h-14 flex items-center justify-center"
                 transition={{
                   duration: 1.2,
                   ease: [0.16, 1, 0.3, 1]
@@ -51,18 +51,18 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
                 <img 
                   src="/logo.webp" 
                   alt="Baldwin Portfolio" 
-                  className="h-8 w-auto object-contain transition-all duration-300 group-hover:scale-[1.03]"
+                  className="h-12 sm:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-[1.04]"
                   onError={() => setLogoFailed(true)}
                 />
               </motion.div>
             )
           ) : (
             /* Premium Fallback Design */
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-black font-display uppercase tracking-wider text-[#CC00FF] [text-shadow:0_0_15px_rgba(204,0,255,0.5)]">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <span className="text-3xl sm:text-4xl font-black font-display uppercase tracking-wider text-[#CC00FF] [text-shadow:0_0_20px_rgba(204,0,255,0.6)]">
                 B
               </span>
-              <span className="text-sm font-semibold font-display tracking-widest text-[#E8D5F5] uppercase hidden sm:inline">
+              <span className="text-sm sm:text-base font-bold font-display tracking-widest text-[#E8D5F5] uppercase hidden sm:inline">
                 BALDWIN
               </span>
             </div>

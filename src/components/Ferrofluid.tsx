@@ -134,13 +134,12 @@ float vn(vec2 p, float s, float seed) {
 }
 
 float dbn(vec2 p, float s, float seed) {
-  float o = s / 2.0;
+  // Ultra-optimized 3-octave blending for peak frame rates (60/120 FPS)
+  float o = s * 0.5;
   float n0 = vn(p, s, seed);
-  float n1 = vn(p + vec2(o, o), s, seed + 0.1);
-  float n2 = vn(p + vec2(-o, o), s, seed + 0.2);
-  float n3 = vn(p + vec2(o, -o), s, seed + 0.3);
-  float n4 = vn(p + vec2(-o, -o), s, seed + 0.4);
-  return (2.0 * n0 + 1.5 * n1 + 1.25 * n2 + 1.125 * n3 + n4) / 7.0;
+  float n1 = vn(p + vec2(o), s, seed + 0.1);
+  float n2 = vn(p - vec2(o), s, seed + 0.2);
+  return (3.0 * n0 + 2.0 * n1 + n2) / 6.0;
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -247,10 +246,12 @@ const Ferrofluid: React.FC<FerrofluidProps> = ({
 
     let renderer: Renderer;
     try {
+      // Cap DPR to 1.0 (to avoid 3x retina overhead on full screen) and disable heavy MSAA antialiasing
+      const computedDpr = Math.min(1.0, dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1));
       renderer = new Renderer({
-        dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
+        dpr: computedDpr,
         alpha: true,
-        antialias: true
+        antialias: false
       });
       rendererRef.current = renderer;
     } catch (e) {

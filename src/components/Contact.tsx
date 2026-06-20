@@ -73,8 +73,8 @@ export default function Contact() {
 
   return (
     <div 
-      id="contact-page" 
-      className="relative min-h-[90vh] px-4 pt-[110px] md:pt-[130px] pb-12 md:px-8 max-w-3xl mx-auto z-10 flex flex-col justify-center selection:bg-purple-500/30 selection:text-[#ECE6F4]"
+      id="contact" 
+      className="relative min-h-screen px-4 pt-24 md:pt-32 pb-24 md:px-8 max-w-3xl mx-auto z-10 flex flex-col justify-center selection:bg-[#CC00FF]/20 selection:text-white"
     >
       {/* Main Container Card */}
       <motion.div
@@ -83,8 +83,8 @@ export default function Contact() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="relative rounded-2xl border p-8 md:p-12 overflow-hidden backdrop-blur-sm shadow-xl"
         style={{
-          backgroundColor: "rgba(10, 0, 16, 0.85)",
-          borderColor: "rgba(123, 47, 190, 0.15)"
+          backgroundColor: "rgba(6, 1, 10, 0.85)",
+          borderColor: "rgba(123, 47, 190, 0.12)"
         }}
       >
         {/* Inner top-right decorative blur card element */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, animate, useInView } from "motion/react";
+import ProfileCard from "./ProfileCard";
 import { 
   Code2, 
   Database, 
@@ -10,8 +11,106 @@ import {
   Linkedin,
   Youtube,
   Twitter,
-  Share2
+  Github,
+  Share2,
+  Atom,
+  Layers,
+  Palette,
+  Zap,
+  Flame,
+  Server,
+  Globe,
+  GitBranch,
+  Brain,
+  Sparkles,
+  Shield,
+  Workflow,
+  Eye,
+  FileCode,
+  Video,
+  Compass,
+  Cloud,
+  Tv,
+  RefreshCw,
+  Lock
 } from "lucide-react";
+
+// Helper function to return beautiful custom icons with themed colors for technical skills/tools
+const getSkillIcon = (name: string) => {
+  const iconSize = 13;
+  switch (name.toLowerCase()) {
+    // Frameworks & Libraries
+    case "react":
+      return <Atom size={iconSize} className="text-[#61DAFB]" />;
+    case "typescript":
+      return <Layers size={iconSize} className="text-[#3178C6]" />;
+    case "tailwindcss":
+      return <Palette size={iconSize} className="text-[#38BDF8]" />;
+    case "framer motion":
+      return <Zap size={iconSize} className="text-[#E10098]" />;
+    case "vite":
+      return <Flame size={iconSize} className="text-[#646CFF]" />;
+    case "supabase":
+      return <Database size={iconSize} className="text-[#3ECF8E]" />;
+    case "postgresql":
+      return <Server size={iconSize} className="text-[#336791]" />;
+    case "rest apis":
+      return <Globe size={iconSize} className="text-[#0FF0FC]" />;
+    case "git & github":
+      return <GitBranch size={iconSize} className="text-[#F05032]" />;
+    case "vercel":
+      return <Globe size={iconSize} className="text-[#FFFFFF]" />;
+    case "lovable ai":
+      return <Brain size={iconSize} className="text-[#FF80B5]" />;
+    case "google ai studio":
+      return <Sparkles size={iconSize} className="text-[#FFD700]" />;
+
+    // Advanced Competencies & Professional Skills
+    case "frontend development":
+      return <Code2 size={iconSize} className="text-[#38BDF8]" />;
+    case "full-stack development":
+      return <Server size={iconSize} className="text-[#A855F7]" />;
+    case "type-safe programming":
+      return <Shield size={iconSize} className="text-[#3178C6]" />;
+    case "ui/ux design":
+      return <Eye size={iconSize} className="text-[#F43F5E]" />;
+    case "performance optimization":
+      return <Zap size={iconSize} className="text-[#EAB308]" />;
+    case "state management":
+      return <Workflow size={iconSize} className="text-[#10B981]" />;
+    case "data fetching":
+      return <Globe size={iconSize} className="text-[#06B6D4]" />;
+    case "ai integration":
+      return <Brain size={iconSize} className="text-[#EC4899]" />;
+    case "local document processing":
+      return <FileCode size={iconSize} className="text-[#F97316]" />;
+    case "security & encryption":
+      return <Lock size={iconSize} className="text-[#EF4444]" />;
+    case "media generation":
+      return <Video size={iconSize} className="text-[#8B5CF6]" />;
+    case "graphics manipulation":
+      return <Palette size={iconSize} className="text-[#6366F1]" />;
+    case "form validation & management":
+      return <Wrench size={iconSize} className="text-[#14B8A6]" />;
+    case "progressive web apps (pwa)":
+      return <Compass size={iconSize} className="text-[#3B82F6]" />;
+    case "webgl graphics":
+      return <Tv size={iconSize} className="text-[#84CC16]" />;
+    case "server-side rendering (ssr)":
+      return <RefreshCw size={iconSize} className="text-[#22C55E]" />;
+    case "static site generation":
+      return <Layers size={iconSize} className="text-[#A855F7]" />;
+    case "cloud integration":
+      return <Cloud size={iconSize} className="text-[#0EA5E9]" />;
+    case "database management":
+      return <Database size={iconSize} className="text-[#64748B]" />;
+    case "real-time applications":
+      return <Cpu size={iconSize} className="text-[#F43F5E]" />;
+
+    default:
+      return <Cpu size={iconSize} className="text-[#A78BCA]" />;
+  }
+};
 
 // Premium count-up counter executing flawlessly when scrolled into view
 function CountUp({ value }: { value: string }) {
@@ -77,24 +176,39 @@ function CountUp({ value }: { value: string }) {
 export default function About() {
   const skillCategories = [
     {
-      title: "Frontend",
+      title: "Frontend Architecture",
       icon: <Code2 size={18} style={{ color: "#CC00FF" }} />,
-      skills: ["React", "TypeScript", "TailwindCSS", "Framer Motion", "Vite"]
+      skills: ["React", "TypeScript", "Frontend Development", "UI/UX Design", "Progressive Web Apps (PWA)", "Form Validation & Management"]
     },
     {
-      title: "Backend & Database",
+      title: "Backend & Reliability",
+      icon: <Server size={18} style={{ color: "#CC00FF" }} />,
+      skills: ["Full-Stack Development", "TypeScript", "Type-Safe Programming", "Server-Side Rendering (SSR)", "Static Site Generation", "Git & GitHub"]
+    },
+    {
+      title: "Data & Cloud Systems",
       icon: <Database size={18} style={{ color: "#CC00FF" }} />,
-      skills: ["Supabase", "PostgreSQL", "REST APIs"]
+      skills: ["Database Management", "Cloud Integration", "Supabase", "PostgreSQL", "REST APIs", "Data Fetching", "Vercel"]
     },
     {
-      title: "Tools & Platforms",
-      icon: <Wrench size={18} style={{ color: "#CC00FF" }} />,
-      skills: ["Git & GitHub", "Vercel", "Lovable AI", "Google AI Studio"]
+      title: "Intelligent & Real-time",
+      icon: <Brain size={18} style={{ color: "#CC00FF" }} />,
+      skills: ["AI Integration", "Real-time Applications", "Local Document Processing", "Google AI Studio", "Lovable AI"]
+    },
+    {
+      title: "Security & Performance",
+      icon: <Shield size={18} style={{ color: "#CC00FF" }} />,
+      skills: ["Security & Encryption", "Performance Optimization", "State Management"]
+    },
+    {
+      title: "Graphics & Media",
+      icon: <Tv size={18} style={{ color: "#CC00FF" }} />,
+      skills: ["WebGL Graphics", "Media Generation", "Graphics Manipulation", "Framer Motion", "TailwindCSS", "Vite"]
     }
   ];
 
   const stats = [
-    { label: "GitHub Repos", value: "+18" },
+    { label: "GitHub Repos", value: "24+" },
     { label: "Primary Stack", value: "TypeScript" },
     { label: "Deployments", value: "Vercel" },
     { label: "Approach", value: "AI-powered builds" }
@@ -102,8 +216,8 @@ export default function About() {
 
   return (
     <div 
-      id="about-page" 
-      className="relative min-h-screen px-4 pt-[110px] md:pt-[130px] pb-24 md:px-8 max-w-5xl mx-auto z-10 selection:bg-[#CC00FF]/30 selection:text-[#E8D5F5]"
+      id="about" 
+      className="relative min-h-screen px-4 pt-24 md:pt-32 pb-24 md:px-8 max-w-5xl mx-auto z-10 selection:bg-[#CC00FF]/20 selection:text-white"
     >
       {/* Decorative localized purple/violet blur orbs */}
       <div className="absolute top-10 right-10 w-80 h-80 rounded-full bg-purple-500/10 blur-3xl pointer-events-none -z-10" />
@@ -112,40 +226,45 @@ export default function About() {
       <div className="space-y-16">
         
         {/* Section 1 — Identity */}
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-left max-w-3xl"
-        >
-          {/* Title badge with pulsing magenta dot */}
-          <div 
-            className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border mb-6 text-xs font-mono tracking-wider uppercase"
-            style={{
-              backgroundColor: "rgba(123, 47, 190, 0.1)",
-              borderColor: "rgba(204, 0, 255, 0.2)",
-              color: "#E8D5F5"
-            }}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-left md:col-span-7 space-y-6"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CC00FF] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#CC00FF]"></span>
-            </span>
-            <span>Vibe Coder</span>
-          </div>
+            {/* Title badge with pulsing magenta dot */}
+            <div 
+              className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full border text-xs font-mono tracking-wider uppercase mb-2"
+              style={{
+                backgroundColor: "rgba(123, 47, 190, 0.1)",
+                borderColor: "rgba(204, 0, 255, 0.2)",
+                color: "#E8D5F5"
+              }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CC00FF] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#CC00FF]"></span>
+              </span>
+              <span>Vibe Coder</span>
+            </div>
 
-          <h2 className="text-4xl md:text-5.5xl font-black tracking-tight mb-4 select-none [text-shadow:0_0_30px_rgba(204,0,255,0.4)]" style={{ color: "#E8D5F5" }}>
-            Baldwin Portfolio
-          </h2>
-          
-          <p 
-            className="text-lg md:text-xl leading-relaxed"
-            style={{ color: "#A78BCA" }}
-          >
-            I build full-stack web experiences using the latest AI tools. From idea to deployment — fast, clean, and professional.
-          </p>
-        </motion.section>
+            <h2 className="text-4xl md:text-5.5xl font-black tracking-tight select-none [text-shadow:0_0_30px_rgba(204,0,255,0.4)]" style={{ color: "#E8D5F5" }}>
+              Baldwin Portfolio
+            </h2>
+            
+            <p 
+              className="text-base sm:text-lg leading-relaxed text-[#A78BCA]"
+            >
+              I build full-stack web experiences using the latest AI tools. From idea to deployment — fast, clean, and professional.
+            </p>
+          </motion.div>
+
+          <div className="md:col-span-5 flex justify-center md:justify-end">
+            <ProfileCard />
+          </div>
+        </section>
 
         {/* Social Channels Section */}
         <motion.section 
@@ -164,74 +283,145 @@ export default function About() {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <motion.a 
-              href="https://www.linkedin.com/in/revo-code-6181283b5"
+              href="https://github.com/revolover00/"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 0.95 }}
-              whileTap={{ scale: 0.90 }}
-              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all group cursor-pointer"
+              whileHover={{ 
+                scale: 1.02, 
+                y: -6,
+                boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
               style={{
                 backgroundColor: "rgba(10, 0, 16, 0.8)",
                 borderColor: "rgba(123, 47, 190, 0.2)"
               }}
             >
-              <div className="p-5 rounded-full mb-4 transition-all group-hover:scale-95" style={{ backgroundColor: "rgba(0, 119, 181, 0.1)" }}>
+              <div className="p-5 rounded-full mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(255, 255, 255, 0.08)" }}>
+                <Github size={44} style={{ color: "#ffffff" }} />
+              </div>
+              <h4 className="font-bold text-lg tracking-wide z-20 transition-colors duration-300 group-hover/card:text-white" style={{ color: "#E8D5F5" }}>
+                GitHub
+              </h4>
+              <p className="text-sm mt-1.5 z-20" style={{ color: "#A78BCA" }}>
+                Explore open source
+              </p>
+
+              {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.15)_0%,transparent_75%)] pointer-events-none z-10"
+              />
+
+              {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+              <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-2xl transition-colors pointer-events-none duration-500 z-30" />
+            </motion.a>
+
+            <motion.a 
+              href="https://www.linkedin.com/in/revo-code-6181283b5"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ 
+                scale: 1.02, 
+                y: -6,
+                boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
+              style={{
+                backgroundColor: "rgba(10, 0, 16, 0.8)",
+                borderColor: "rgba(123, 47, 190, 0.2)"
+              }}
+            >
+              <div className="p-5 rounded-full mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(0, 119, 181, 0.1)" }}>
                 <Linkedin size={44} style={{ color: "#0077B5" }} />
               </div>
-              <h4 className="font-bold text-lg tracking-wide animate-pulse" style={{ color: "#E8D5F5" }}>
+              <h4 className="font-bold text-lg tracking-wide z-20 transition-colors duration-300 group-hover/card:text-white" style={{ color: "#E8D5F5" }}>
                 LinkedIn
               </h4>
-              <p className="text-sm mt-1.5" style={{ color: "#A78BCA" }}>
+              <p className="text-sm mt-1.5 z-20" style={{ color: "#A78BCA" }}>
                 Connect professionally
               </p>
+
+              {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.15)_0%,transparent_75%)] pointer-events-none z-10"
+              />
+
+              {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+              <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-2xl transition-colors pointer-events-none duration-500 z-30" />
             </motion.a>
 
             <motion.a 
               href="https://www.youtube.com/@Revo-code"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 0.95 }}
-              whileTap={{ scale: 0.90 }}
-              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all group cursor-pointer"
+              whileHover={{ 
+                scale: 1.02, 
+                y: -6,
+                boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
               style={{
                 backgroundColor: "rgba(10, 0, 16, 0.8)",
                 borderColor: "rgba(123, 47, 190, 0.2)"
               }}
             >
-              <div className="p-5 rounded-full mb-4 transition-all group-hover:scale-95" style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}>
+              <div className="p-5 rounded-full mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}>
                 <Youtube size={44} style={{ color: "#FF0000" }} />
               </div>
-              <h4 className="font-bold text-lg tracking-wide animate-pulse" style={{ color: "#E8D5F5" }}>
+              <h4 className="font-bold text-lg tracking-wide z-20 transition-colors duration-300 group-hover/card:text-white" style={{ color: "#E8D5F5" }}>
                 YouTube
               </h4>
-              <p className="text-sm mt-1.5" style={{ color: "#A78BCA" }}>
+              <p className="text-sm mt-1.5 z-20" style={{ color: "#A78BCA" }}>
                 Subscribe to our channel
               </p>
+
+              {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.15)_0%,transparent_75%)] pointer-events-none z-10"
+              />
+
+              {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+              <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-2xl transition-colors pointer-events-none duration-500 z-30" />
             </motion.a>
 
             <motion.a 
               href="https://x.com/revo_codes"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 0.95 }}
-              whileTap={{ scale: 0.90 }}
-              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all group cursor-pointer"
+              whileHover={{ 
+                scale: 1.02, 
+                y: -6,
+                boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="p-8 rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
               style={{
                 backgroundColor: "rgba(10, 0, 16, 0.8)",
                 borderColor: "rgba(123, 47, 190, 0.2)"
               }}
             >
-              <div className="p-5 rounded-full mb-4 transition-all group-hover:scale-95" style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}>
+              <div className="p-5 rounded-full mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}>
                 <Twitter size={44} style={{ color: "#E8D5F5" }} />
               </div>
-              <h4 className="font-bold text-lg tracking-wide animate-pulse" style={{ color: "#E8D5F5" }}>
+              <h4 className="font-bold text-lg tracking-wide z-20 transition-colors duration-300 group-hover/card:text-white" style={{ color: "#E8D5F5" }}>
                 X / Twitter
               </h4>
-              <p className="text-sm mt-1.5" style={{ color: "#A78BCA" }}>
+              <p className="text-sm mt-1.5 z-20" style={{ color: "#A78BCA" }}>
                 Follow for updates
               </p>
+
+              {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+              <div 
+                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.15)_0%,transparent_75%)] pointer-events-none z-10"
+              />
+
+              {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+              <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-2xl transition-colors pointer-events-none duration-500 z-30" />
             </motion.a>
           </div>
         </motion.section>
@@ -272,21 +462,25 @@ export default function About() {
                     }
                   }
                 }}
-                whileHover={{ scale: 0.97 }}
-                whileTap={{ scale: 0.94 }}
-                className="p-6 rounded-2xl border cursor-pointer select-none"
+                whileHover={{ 
+                  scale: 1.02, 
+                  y: -6,
+                  boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.3), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="p-6 rounded-2xl border cursor-pointer select-none group/card relative overflow-hidden transition-all duration-500 ease-out"
                 style={{
                   backgroundColor: "rgba(10, 0, 16, 0.8)",
                   borderColor: "rgba(123, 47, 190, 0.2)"
                 }}
               >
-                <div className="flex items-center space-x-2.5 mb-4">
+                <div className="flex items-center space-x-2.5 mb-4 z-20 relative">
                   {category.icon}
                   <h4 className="font-bold text-sm tracking-wide uppercase" style={{ color: "#E8D5F5" }}>
                     {category.title}
                   </h4>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2.5 z-20 relative">
                   {category.skills.map((skill, sIdx) => (
                     <motion.span 
                       key={sIdx}
@@ -303,17 +497,25 @@ export default function About() {
                           } 
                         }
                       }}
-                      className="px-3 py-1 rounded-full text-xs font-medium border inline-block"
+                      className="px-3.5 py-1.5 rounded-full text-xs font-medium border inline-flex items-center space-x-2 bg-white/[0.02] hover:bg-white/[0.06] hover:border-[#CC00FF]/40 transition-colors duration-200 cursor-pointer"
                       style={{
-                        backgroundColor: "rgba(123, 47, 190, 0.1)",
-                        borderColor: "rgba(204, 0, 255, 0.2)",
+                        borderColor: "rgba(192, 132, 252, 0.15)",
                         color: "#E8D5F5"
                       }}
                     >
-                      {skill}
+                      {getSkillIcon(skill)}
+                      <span>{skill}</span>
                     </motion.span>
                   ))}
                 </div>
+
+                {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.12)_0%,transparent_75%)] pointer-events-none z-10"
+                />
+
+                {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+                <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-2xl transition-colors pointer-events-none duration-500 z-30" />
               </motion.div>
             ))}
           </div>
@@ -387,38 +589,52 @@ export default function About() {
                     } 
                   },
                 }}
-                whileHover={{ scale: 1.03, y: -4, boxShadow: "0 10px 25px rgba(204, 0, 255, 0.15)" }}
-                whileTap={{ scale: 0.97 }}
-                className="p-5 rounded-2xl border flex flex-col justify-center h-28 cursor-pointer select-none transition-shadow"
+                whileHover={{ 
+                  scale: 1.04, 
+                  y: -6, 
+                  boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.3), 0 0 20px 2px rgba(204, 0, 255, 0.15)" 
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="p-5 rounded-2xl border flex flex-col justify-center h-28 cursor-pointer select-none group/card relative overflow-hidden transition-all duration-500 ease-out"
                 style={{
                   backgroundColor: "rgba(123, 47, 190, 0.08)",
                   borderColor: "rgba(123, 47, 190, 0.25)"
                 }}
               >
-                <motion.span 
-                  variants={{
-                    hidden: { opacity: 0, x: -8 },
-                    visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } }
-                  }}
-                  className="text-xs font-medium tracking-wide uppercase mb-1 block" 
-                  style={{ color: "#A78BCA" }}
-                >
-                  {stat.label}
-                </motion.span>
-                <motion.span 
-                  variants={{
-                    hidden: { opacity: 0, y: 8 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut", delay: 0.15 } }
-                  }}
-                  className="text-lg md:text-xl font-black tracking-tight block" 
-                  style={{ color: "#E8D5F5" }}
-                >
-                  {stat.value.match(/\d+/) ? (
-                    <CountUp value={stat.value} />
-                  ) : (
-                    stat.value
-                  )}
-                </motion.span>
+                <div className="z-20 relative">
+                  <motion.span 
+                    variants={{
+                      hidden: { opacity: 0, x: -8 },
+                      visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } }
+                    }}
+                    className="text-xs font-medium tracking-wide uppercase mb-1 block" 
+                    style={{ color: "#A78BCA" }}
+                  >
+                    {stat.label}
+                  </motion.span>
+                  <motion.span 
+                    variants={{
+                      hidden: { opacity: 0, y: 8 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut", delay: 0.15 } }
+                    }}
+                    className="text-lg md:text-xl font-black tracking-tight block" 
+                    style={{ color: "#E8D5F5" }}
+                  >
+                    {stat.value.match(/\d+/) ? (
+                      <CountUp value={stat.value} />
+                    ) : (
+                      stat.value
+                    )}
+                  </motion.span>
+                </div>
+
+                {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.12)_0%,transparent_75%)] pointer-events-none z-10"
+                />
+
+                {/* Decorative premium hover border highlight with animated magenta/purple outline */}
+                <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-2xl transition-colors pointer-events-none duration-500 z-30" />
               </motion.div>
             ))}
           </motion.div>

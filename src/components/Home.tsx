@@ -28,78 +28,32 @@ interface Ember {
 
 export default function Home({ onNavigate, showSplash }: HomeProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [snippets, setSnippets] = useState<Snippet[]>([]);
+  const [typedLength, setTypedLength] = useState(0);
+  const fullTitle = "Hi, I'm Baldwin";
+  const baseText = "Hi, I'm ";
 
-  // Programmatic autoplay attempt for highest iframe and mobile compatibility
+  // Premium typewriter effect
   useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      // Force loading and playing explicitly with guaranteed muted state
-      video.muted = true;
-      video.defaultMuted = true;
-      video.setAttribute("muted", "");
-      video.setAttribute("playsinline", "");
-      
-      const playVideo = () => {
-        video.play().catch((err) => {
-          // Log only as debug-level to avoid polluting console with standard battery-saver or power-saving browser states
-          console.debug("Autoplay deferred or handled silently:", err);
-        });
-      };
-
-      // Play immediately
-      playVideo();
-
-      // Listeners for any interaction/focus to override autoplay restrictions and keep loop active
-      const resumePlay = () => {
-        if (videoRef.current) {
-          videoRef.current.play().catch(() => {});
-        }
-        document.removeEventListener("click", resumePlay);
-        document.removeEventListener("touchstart", resumePlay);
-        document.removeEventListener("keydown", resumePlay);
-        document.removeEventListener("scroll", resumePlay);
-      };
-
-      const handleVisibility = () => {
-        if (document.visibilityState === "visible" && videoRef.current) {
-          videoRef.current.play().catch(() => {});
-        }
-      };
-
-      const handleFocus = () => {
-        if (videoRef.current) {
-          videoRef.current.play().catch(() => {});
-        }
-      };
-
-      document.addEventListener("click", resumePlay);
-      document.addEventListener("touchstart", resumePlay);
-      document.addEventListener("keydown", resumePlay);
-      document.addEventListener("scroll", resumePlay);
-      document.addEventListener("visibilitychange", handleVisibility);
-      window.addEventListener("focus", handleFocus);
-
-      return () => {
-        document.removeEventListener("click", resumePlay);
-        document.removeEventListener("touchstart", resumePlay);
-        document.removeEventListener("keydown", resumePlay);
-        document.removeEventListener("scroll", resumePlay);
-        document.removeEventListener("visibilitychange", handleVisibility);
-        window.removeEventListener("focus", handleFocus);
-      };
+    if (showSplash) {
+      setTypedLength(0);
+      return;
     }
-  }, []);
 
-  // Sync and resume background video play when splash screen is dismissed
-  useEffect(() => {
-    if (!showSplash) {
-      const video = videoRef.current;
-      if (video) {
-        video.play().catch(() => {});
-      }
-    }
+    const startTimeout = setTimeout(() => {
+      let current = 0;
+      const interval = setInterval(() => {
+        current++;
+        setTypedLength(current);
+        if (current >= fullTitle.length) {
+          clearInterval(interval);
+        }
+      }, 100);
+
+      return () => clearInterval(interval);
+    }, 500);
+
+    return () => clearTimeout(startTimeout);
   }, [showSplash]);
 
   // Generate code fragments once on load
@@ -156,15 +110,15 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
     ];
 
     const spawnEmber = () => {
-      if (embers.length > 45) return;
+      if (embers.length > 25) return; // Highly optimized: Limit max active embers to 25
       const rColor = colors[Math.floor(Math.random() * colors.length)];
       embers.push({
         x: Math.random() * canvas.width,
         y: canvas.height + 20,
-        size: 1 + Math.random() * 3,
-        speedY: -(0.5 + Math.random() * 1.5),
-        opacity: 0.1 + Math.random() * 0.5,
-        fadeSpeed: 0.001 + Math.random() * 0.003,
+        size: 1 + Math.random() * 2.5,
+        speedY: -(0.4 + Math.random() * 1.2),
+        opacity: 0.15 + Math.random() * 0.45,
+        fadeSpeed: 0.001 + Math.random() * 0.002,
         color: rColor
       });
     };
@@ -173,7 +127,7 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Spawn new embers randomly
-      if (Math.random() < 0.15) {
+      if (Math.random() < 0.12) {
         spawnEmber();
       }
 
@@ -182,13 +136,21 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
         ember.opacity -= ember.fadeSpeed;
 
         // horizontal wander
-        ember.x += Math.sin(ember.y / 30) * 0.3;
+        ember.x += Math.sin(ember.y / 30) * 0.25;
 
+        // HIGH PERFORMANCE GLOW EFFECT: Use hardware-accelerated dual overlapping arc fills
+        // Instead of extremely slow and laggy CPU-bound ctx.shadowBlur!
+        
+        // Outer soft glow aura
+        ctx.beginPath();
+        ctx.arc(ember.x, ember.y, ember.size * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(204, 0, 255, ${ember.opacity * 0.15})`;
+        ctx.fill();
+
+        // Core bright ember
         ctx.beginPath();
         ctx.arc(ember.x, ember.y, ember.size, 0, Math.PI * 2);
         ctx.fillStyle = `${ember.color}${ember.opacity})`;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = "rgba(204, 0, 255, 0.4)";
         ctx.fill();
 
         // Remove out-of-screen or fully transparent embers
@@ -197,7 +159,6 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
         }
       });
 
-      ctx.shadowBlur = 0; // reset shadow blurring
       animationFrameId = requestAnimationFrame(draw);
     };
 
@@ -210,187 +171,88 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen text-[#ECE6F4] flex flex-col justify-start overflow-x-hidden pb-24 select-none">
+    <div id="home" className="relative min-h-screen text-[#ECE6F4] flex flex-col justify-center items-center overflow-x-hidden selection:bg-[#CC00FF]/20 selection:text-white select-none">
       
-      {/* 4. VIDEO HERO BACKGROUND SYSTEM (Absolute positioned behind content and fully clean) */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        <video 
-          ref={videoRef}
-          autoPlay 
-          muted 
-          loop 
-          playsInline 
-          preload="auto"
-          className="w-full h-full object-cover opacity-100 transition-opacity duration-1000 ease-in-out font-sans"
-        >
-          <source src="https://res.cloudinary.com/dcoif7wax/video/upload/1786_eyyo5q.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+      {/* Premium ambient particle canvas */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+        <canvas ref={canvasRef} className="w-full h-full opacity-60" />
       </div>
 
-      {/* 5. HERO FOREGROUND CONTENT CANVAS */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20">
-        <div className="pt-[140px] md:pt-[160px] pb-12 max-w-3xl text-left flex flex-col gap-6">
+      {/* Hero Foreground Content Canvas */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-20 flex flex-col items-center justify-center py-20">
+        <div className="flex flex-col items-center text-center gap-8 max-w-3xl">
           
-          {/* LARGE MAIN HEADER */}
-          <motion.div
+          {/* Main Hero Title */}
+          <motion.h1 
+            className="text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight leading-[1.05]"
+            style={{
+              fontFamily: "'Syne', sans-serif"
+            }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          >
+            {fullTitle.slice(0, Math.min(typedLength, baseText.length))}
+            {typedLength > baseText.length && (
+              <span className="bg-gradient-to-r from-white via-[#E8D5F5] to-[#C084FC] bg-clip-text text-transparent filter drop-shadow-[0_0_20px_rgba(192,132,252,0.15)]">
+                {fullTitle.slice(baseText.length, typedLength)}
+              </span>
+            )}
+            <span 
+              className={`inline-block w-[3px] h-[0.8em] align-middle bg-[#CC00FF] ml-1 sm:ml-2 ${
+                typedLength < fullTitle.length ? "animate-pulse" : "animate-[ping_1.2s_infinite_normal_both] opacity-80"
+              }`}
+            />
+          </motion.h1>
+
+          {/* Subtitle description with elegant line height */}
+          <motion.p
+            className="text-base sm:text-lg md:text-xl font-light leading-relaxed text-[#A78BCA] max-w-2xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
-            className="mb-6"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           >
-            <h1 
-              className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-[#E8D5F5] leading-[1.1]"
-              style={{
-                textShadow: "0 4px 16px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.9)"
-              }}
-            >
-              Hi I'm{" "}
-              <span 
-                className="inline-block bg-gradient-to-r from-[#CC00FF] via-[#7B2FBE] to-[#FF3366] bg-clip-text text-transparent"
-                style={{
-                  filter: "drop-shadow(0 2px 25px rgba(204, 0, 255, 0.9)) drop-shadow(0 0 8px rgba(255, 51, 102, 0.6))"
-                }}
-              >
-                Baldwin
-              </span>
-            </h1>
-
-            {/* Glowing Purple Laser Sword decoration */}
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={showSplash ? { scaleX: 0, opacity: 0 } : { scaleX: 1, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 45, damping: 15, delay: 0.2 }}
-              className="my-6 flex items-center justify-start origin-left relative"
-            >
-              <svg 
-                width="450" 
-                height="40" 
-                viewBox="0 0 450 40" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg"
-                className="drop-shadow-[0_0_20px_rgba(204,0,255,0.95)] max-w-full"
-              >
-                <defs>
-                  <linearGradient id="purpleSwordBladeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#7B2FBE" />
-                    <stop offset="25%" stopColor="#CC00FF" />
-                    <stop offset="65%" stopColor="#E8D5F5" />
-                    <stop offset="100%" stopColor="#FFFFFF" />
-                  </linearGradient>
-                  <filter id="swordGlow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="4.5" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-                
-                {/* Pommel */}
-                <circle cx="13" cy="20" r="5.5" fill="#501880" stroke="#E8D5F5" strokeWidth="1" />
-                <circle cx="13" cy="20" r="2" fill="#CC00FF" />
-                
-                {/* Grip Handle */}
-                <rect x="18.5" y="17.5" width="32" height="5" rx="1.5" fill="#2E0E4E" stroke="#A78BCA" strokeWidth="1" />
-                <line x1="265" y1="0" x2="265" y2="0" /> {/* dummy anchor */}
-                <line x1="26" y1="17.5" x2="26" y2="22.5" stroke="#E8D5F5" strokeWidth="1" />
-                <line x1="34" y1="17.5" x2="34" y2="22.5" stroke="#E8D5F5" strokeWidth="1" />
-                <line x1="42" y1="17.5" x2="42" y2="22.5" stroke="#E8D5F5" strokeWidth="1" />
-
-                {/* Handguard / Wings */}
-                <path d="M 50.5 6 Q 54.5 20 50.5 34 C 50.5 34 54.5 34 58.5 26 L 58.5 14 C 54.5 6 50.5 6 50.5 6 Z" fill="#501880" stroke="#E8D5F5" strokeWidth="1" />
-                <circle cx="53" cy="20" r="4" fill="#CC00FF" />
-
-                {/* Cyberpunk aura light below the blade */}
-                <path 
-                  d="M 58.5 12 L 415 12 L 440 20 L 415 28 L 58.5 28 Z" 
-                  fill="#CC00FF" 
-                  opacity="0.65" 
-                  filter="url(#swordGlow)"
-                />
-
-                {/* High quality glowing blade core */}
-                <path 
-                  d="M 58.5 14.5 L 412 14.5 L 435 20 L 412 25.5 L 58.5 25.5 Z" 
-                  fill="url(#purpleSwordBladeGrad)" 
-                />
-                
-                {/* White laser beam core center shining line */}
-                <line x1="61.5" y1="20" x2="410" y2="20" stroke="#FFFFFF" strokeWidth="1.5" opacity="0.95" />
-              </svg>
-            </motion.div>
-          </motion.div>
-
-          {/* DETAIL SUBHEADING */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-            className="text-base sm:text-lg md:text-xl font-medium leading-relaxed text-[#A78BCA] max-w-2xl mb-10"
-            style={{
-              textShadow: "0 3px 14px rgba(0, 0, 0, 0.95), 0 1px 4px rgba(0, 0, 0, 0.9)"
-            }}
-          >
-            Building immersive digital experiences, interactive web applications, and visually stunning interfaces. Blending design with advanced frontend architecture.
+            Building immersive digital experiences, interactive web applications, and visually stunning interfaces. Blending high-end design with advanced frontend craft.
           </motion.p>
 
-          {/* CALL-TO-ACTIONS */}
+          {/* Call-to-actions */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.45 }}
-            className="flex flex-row flex-wrap gap-4 items-center"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}
+            className="flex flex-row flex-wrap gap-4 items-center justify-center mt-2"
           >
-            {/* View work button */}
-            <button
+            {/* View selected work */}
+            <motion.button
+              whileHover={{ scale: 1.03, boxShadow: "0 0 35px rgba(232, 213, 245, 0.3)" }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
               onClick={() => onNavigate("#work")}
-              className="px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] cursor-pointer flex items-center space-x-2 group"
-              style={{
-                backgroundColor: "#E8D5F5",
-                color: "#0A0010"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#FFFFFF";
-                e.currentTarget.style.boxShadow = "0 0 25px rgba(232, 213, 245, 0.4)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#E8D5F5";
-                e.currentTarget.style.boxShadow = "none";
-              }}
+              className="px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest transition-all cursor-pointer flex items-center space-x-2 bg-white text-[#06010A]"
             >
-              <span>View Work</span>
-              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+              <span>View Selected Work</span>
+              <ArrowRight size={13} />
+            </motion.button>
 
             {/* Contact button */}
-            <button
+            <motion.button
+              whileHover={{ 
+                scale: 1.03, 
+                backgroundColor: "rgba(232, 213, 245, 0.18)", 
+                borderColor: "rgba(192, 132, 252, 0.6)", 
+                boxShadow: "0 0 30px rgba(192, 132, 252, 0.15)"
+              }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
               onClick={() => onNavigate("#contact")}
-              className="px-8 py-3.5 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 border hover:scale-[1.02] cursor-pointer flex items-center space-x-2 backdrop-blur-md"
-              style={{
-                backgroundColor: "rgba(232, 213, 245, 0.12)",
-                borderColor: "rgba(232, 213, 245, 0.4)",
-                color: "#FFFFFF",
-                boxShadow: "inset 0 0 20px rgba(232, 213, 245, 0.05)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(232, 213, 245, 0.25)";
-                e.currentTarget.style.borderColor = "rgba(204, 0, 255, 0.6)";
-                e.currentTarget.style.boxShadow = "0 0 30px rgba(204, 0, 255, 0.3), inset 0 0 20px rgba(232, 213, 245, 0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(232, 213, 245, 0.12)";
-                e.currentTarget.style.borderColor = "rgba(232, 213, 245, 0.4)";
-                e.currentTarget.style.boxShadow = "inset 0 0 20px rgba(232, 213, 245, 0.05)";
-              }}
+              className="px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest transition-all border cursor-pointer flex items-center space-x-2 backdrop-blur-md bg-white/5 border-white/20 text-white"
             >
               <span>Contact Me</span>
-              <MessageSquare size={15} />
-            </button>
+              <MessageSquare size={13} />
+            </motion.button>
           </motion.div>
 
         </div>
-
       </div>
     </div>
   );
