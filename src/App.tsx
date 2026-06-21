@@ -3,7 +3,6 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Work from "./components/Work";
-import Process from "./components/Process";
 import Testimonials from "./components/Testimonials";
 import About from "./components/About";
 import Contact from "./components/Contact";
@@ -319,14 +318,6 @@ export default function App() {
                       </div>
 
                       <Work onNavigate={navigateToRoute} />
-
-                      {/* Atmospheric separator */}
-                      <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">
-                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[#7B2FBE]/30 to-transparent" />
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#CC00FF]/40 blur-[1px] animate-pulse" />
-                      </div>
-
-                      <Process />
 
                       {/* Atmospheric separator */}
                       <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">

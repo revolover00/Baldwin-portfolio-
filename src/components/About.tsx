@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, animate, useInView } from "motion/react";
 import ProfileCard from "./ProfileCard";
+import Process from "./Process";
 import { 
   Code2, 
   Database, 
@@ -230,7 +231,7 @@ export default function About() {
   return (
     <div 
       id="about" 
-      className="relative min-h-screen px-4 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-24 md:px-8 max-w-5xl mx-auto z-10 selection:bg-[#CC00FF]/20 selection:text-white"
+      className="relative min-h-screen px-4 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-24 md:px-8 max-w-7xl mx-auto z-10 selection:bg-[#CC00FF]/20 selection:text-white"
     >
       {/* Decorative localized purple/violet blur orbs */}
       <div className="absolute top-10 right-10 w-60 sm:w-80 h-60 sm:h-80 rounded-full bg-purple-500/10 blur-2xl sm:blur-3xl pointer-events-none -z-10" />
@@ -238,14 +239,15 @@ export default function About() {
 
       <div className="space-y-12 sm:space-y-16">
         
-        {/* Section 1 — Identity */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center">
+        {/* Section 1 — Identity (With ProfileCard & Process) */}
+        <section className="space-y-12 lg:space-y-16">
+          {/* Identity Header Text */}
           <motion.div 
             initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-left md:col-span-7 space-y-4 sm:space-y-6"
+            className="text-left space-y-4 sm:space-y-6 max-w-3xl"
           >
             {/* Title badge with pulsing magenta dot */}
             <div 
@@ -274,8 +276,17 @@ export default function About() {
             </p>
           </motion.div>
 
-          <div className="md:col-span-5 flex justify-center md:justify-end">
-            <ProfileCard />
+          {/* Side-by-Side on Desktop, Stacked on Mobile */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+            {/* Baldwin's Photo (Profile Card) */}
+            <div className="lg:col-span-4 flex justify-center lg:justify-start">
+              <ProfileCard />
+            </div>
+
+            {/* How I Work Process */}
+            <div className="lg:col-span-8 w-full">
+              <Process />
+            </div>
           </div>
         </section>
 
