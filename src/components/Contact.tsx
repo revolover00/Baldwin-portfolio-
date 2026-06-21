@@ -73,7 +73,7 @@ export default function Contact() {
 
   return (
     <div 
-      id="contact" 
+      id="quote" 
       className="relative min-h-screen px-4 pt-16 sm:pt-24 md:pt-32 pb-16 sm:pb-24 md:px-8 max-w-3xl mx-auto z-10 flex flex-col justify-center selection:bg-[#CC00FF]/20 selection:text-white"
     >
       {/* Main Container Card */}
@@ -81,11 +81,7 @@ export default function Contact() {
         initial={{ opacity: 0, scale: 0.98, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative rounded-2xl border p-6 sm:p-8 md:p-12 overflow-hidden backdrop-blur-sm shadow-xl"
-        style={{
-          backgroundColor: "rgba(6, 1, 10, 0.85)",
-          borderColor: "rgba(123, 47, 190, 0.12)"
-        }}
+        className="gothic-card rounded-2xl p-6 sm:p-8 md:p-12 shadow-xl"
       >
         {/* Inner top-right decorative blur card element */}
         <div className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-purple-500/10 blur-2xl pointer-events-none -z-10" />
@@ -126,7 +122,7 @@ export default function Contact() {
                 borderColor: "rgba(123, 47, 190, 0.2)"
               }}
             >
-              <div className="flex items-center space-x-2 text-xs font-mono uppercase mb-1" style={{ color: "#6B4F8A" }}>
+              <div className="flex items-center space-x-2 text-xs font-mono uppercase mb-1" style={{ color: "#A78BCA" }}>
                 <ShieldCheck size={14} style={{ color: "#CC00FF" }} />
                 <span>Rate-Limit Protocol ACTIVE</span>
               </div>
@@ -163,24 +159,31 @@ export default function Contact() {
           /* FORM ENTRY STATE */
           <div>
             {/* Header section inside card */}
-            <div className="flex items-center space-x-3.5 mb-6 sm:mb-8">
-              <span className="p-1.5 sm:p-2.5 rounded-lg bg-purple-600/10">
-                <Mail size={18} className="sm:w-5.5 sm:h-5.5" style={{ color: "#CC00FF" }} />
-              </span>
-              <div>
-                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight" style={{ color: "#E8D5F5" }}>
-                  Transmit Message
-                </h2>
-                <p className="text-[10px] sm:text-xs mt-0.5" style={{ color: "#A78BCA" }}>
-                  Connect directly with Baldwin regarding projects and engineering roles
-                </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+              <div className="flex items-center space-x-3.5">
+                <span className="p-1.5 sm:p-2.5 rounded-lg bg-purple-600/10">
+                  <Mail size={18} className="sm:w-5.5 sm:h-5.5" style={{ color: "#CC00FF" }} />
+                </span>
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight" style={{ color: "#E8D5F5" }}>
+                    Request a Quote
+                  </h2>
+                  <p className="text-[10px] sm:text-xs mt-0.5" style={{ color: "#A78BCA" }}>
+                    Get detailed pricing and consultation on your next digital product
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 w-fit">
+                <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#A78BCA]">Usually replies within 24h</span>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               {/* Sender Email Input */}
               <div className="flex flex-col space-y-1.5 sm:space-y-2">
-                <label htmlFor="email" className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#6B4F8A" }}>
+                <label htmlFor="email" className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#A78BCA" }}>
                   Sender Email Address
                 </label>
                 <input
@@ -209,7 +212,7 @@ export default function Contact() {
 
               {/* Subject Input */}
               <div className="flex flex-col space-y-1.5 sm:space-y-2">
-                <label htmlFor="subject" className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#6B4F8A" }}>
+                <label htmlFor="subject" className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#A78BCA" }}>
                   Transmission Subject
                 </label>
                 <input
@@ -238,7 +241,7 @@ export default function Contact() {
 
               {/* Message Body Input */}
               <div className="flex flex-col space-y-1.5 sm:space-y-2">
-                <label htmlFor="body" className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#6B4F8A" }}>
+                <label htmlFor="body" className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#A78BCA" }}>
                   Message Payload
                 </label>
                 <textarea

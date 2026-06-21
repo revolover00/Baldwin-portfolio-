@@ -40,20 +40,23 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
       return;
     }
 
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+
     const startTimeout = setTimeout(() => {
       let current = 0;
-      const interval = setInterval(() => {
+      intervalId = setInterval(() => {
         current++;
         setTypedLength(current);
         if (current >= fullTitle.length) {
-          clearInterval(interval);
+          clearInterval(intervalId);
         }
       }, 100);
-
-      return () => clearInterval(interval);
     }, 500);
 
-    return () => clearTimeout(startTimeout);
+    return () => {
+      clearTimeout(startTimeout);
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [showSplash]);
 
   // Generate code fragments once on load
@@ -235,6 +238,32 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.45 }}
             className="flex flex-row flex-wrap gap-3 sm:gap-4 items-center justify-center mt-1"
           >
+            {/* Get a Quote / Primary (now transparent) */}
+            <motion.button
+              whileHover={{ 
+                scale: 1.03, 
+                backgroundColor: "rgba(232, 213, 245, 0.18)", 
+                borderColor: "rgba(204, 0, 255, 0.6)", 
+                boxShadow: "0 0 35px rgba(204, 0, 255, 0.35)"
+              }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              onClick={() => {
+                // Pre-fill subject via hash params or local state depending on logic; for now deep-link
+                onNavigate("#quote");
+                setTimeout(() => {
+                  const subjectField = document.getElementById("subject") as HTMLInputElement;
+                  if (subjectField) {
+                     subjectField.value = "Consultation / Book a Call";
+                  }
+                }, 100);
+              }}
+              className="px-6 sm:px-8 py-3 sm:py-4 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all border cursor-pointer flex items-center space-x-2 backdrop-blur-md bg-white/5 border-white/20 text-white"
+            >
+              <span>Get a Quote</span>
+              <MessageSquare size={12} className="text-[#CC00FF]" />
+            </motion.button>
+
             {/* View selected work */}
             <motion.button
               whileHover={{ scale: 1.03, boxShadow: "0 0 35px rgba(232, 213, 245, 0.3)" }}
@@ -243,25 +272,8 @@ export default function Home({ onNavigate, showSplash }: HomeProps) {
               onClick={() => onNavigate("#work")}
               className="px-6 sm:px-8 py-3 sm:py-4 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all cursor-pointer flex items-center space-x-2 bg-white text-[#06010A]"
             >
-              <span>View Selected Work</span>
+              <span>View Work</span>
               <ArrowRight size={12} />
-            </motion.button>
-
-            {/* Contact button */}
-            <motion.button
-              whileHover={{ 
-                scale: 1.03, 
-                backgroundColor: "rgba(232, 213, 245, 0.18)", 
-                borderColor: "rgba(192, 132, 252, 0.6)", 
-                boxShadow: "0 0 30px rgba(192, 132, 252, 0.15)"
-              }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              onClick={() => onNavigate("#contact")}
-              className="px-6 sm:px-8 py-3 sm:py-4 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all border cursor-pointer flex items-center space-x-2 backdrop-blur-md bg-white/5 border-white/20 text-white"
-            >
-              <span>Contact Me</span>
-              <MessageSquare size={12} />
             </motion.button>
           </motion.div>
 

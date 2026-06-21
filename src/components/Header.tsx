@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 
 interface HeaderProps {
-  currentTab: string; // e.g. 'home', 'work', 'about', 'contact', or 'project'
+  currentTab: string; // e.g. 'home', 'work', 'about', 'quote', or 'project'
   onNavigate: (route: string) => void;
   showSplash?: boolean;
 }
@@ -14,7 +14,7 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
     { label: "Home", route: "#home", id: "home" },
     { label: "Work", route: "#work", id: "work" },
     { label: "About", route: "#about", id: "about" },
-    { label: "Contact", route: "#contact", id: "contact" }
+    { label: "Get Quote", route: "#quote", id: "quote" }
   ];
 
   const handleNavClick = (route: string) => {
@@ -121,8 +121,25 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
           })}
         </div>
 
-        {/* Right side spacer for visual balance since nav is absolutely centered */}
-        <div className="w-8 sm:w-12 h-8" />
+        {/* Right side: Available Badge */}
+        <div className="flex items-center justify-end min-w-[100px] sm:min-w-[140px]">
+          <div className="hidden sm:flex items-center space-x-2 bg-white/5 border border-[#CC00FF]/30 px-3 py-1.5 rounded-full cursor-pointer hover:bg-white/10 transition-colors pointer-events-auto" onClick={() => handleNavClick("#quote")}>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CC00FF] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#CC00FF]"></span>
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#E8D5F5] whitespace-nowrap">
+              Available
+            </span>
+          </div>
+          {/* Mobile minimal badge */}
+          <div className="sm:hidden flex items-center justify-center h-6 w-6 rounded-full bg-white/5 border border-[#CC00FF]/30 cursor-pointer" onClick={() => handleNavClick("#quote")}>
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#CC00FF] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#CC00FF]"></span>
+            </span>
+          </div>
+        </div>
       </div>
     </nav>
   );

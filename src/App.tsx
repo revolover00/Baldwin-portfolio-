@@ -1,26 +1,34 @@
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Work from "./components/Work";
+import Process from "./components/Process";
+import Testimonials from "./components/Testimonials";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import ProjectDetail from "./components/ProjectDetail";
 import Splash from "./components/Splash";
 import Ferrofluid from "./components/Ferrofluid";
+import CustomCursor from "./components/CustomCursor";
 import { Twitter, Linkedin, Youtube, Github } from "lucide-react";
 import { Store } from "./store";
 import Lenis from "lenis";
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
   const [route, setRoute] = useState(() => {
     const hash = window.location.hash || "#home";
     if (hash.startsWith("#project/")) return { tab: "project", projectId: hash.substring(9) };
     return { tab: "home", projectId: "" };
   });
 
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState(() => {
+    const hash = window.location.hash || "#home";
+    if (hash.startsWith("#project/")) return "work";
+    return hash.replace("#", "") || "home";
+  });
   const lenisRef = useRef<Lenis | null>(null);
 
   // Pre-load work projects immediately so that they are loaded on any page
@@ -133,7 +141,7 @@ export default function App() {
   useEffect(() => {
     if (!showSplash && route.tab !== "project") {
       const initialHash = window.location.hash.replace("#", "");
-      if (initialHash && ["home", "work", "about", "contact"].includes(initialHash)) {
+      if (initialHash && ["home", "work", "about", "quote"].includes(initialHash)) {
         const timer = setTimeout(() => {
           const el = document.getElementById(initialHash);
           if (el && lenisRef.current) {
@@ -149,7 +157,7 @@ export default function App() {
   useEffect(() => {
     if (route.tab === "project") return;
 
-    const sections = ["home", "work", "about", "contact"];
+    const sections = ["home", "work", "about", "quote"];
     const observerOptions = {
       root: null,
       rootMargin: "-45% 0px -40% 0px", // Trigger when center focus passes
@@ -196,6 +204,16 @@ export default function App() {
       </AnimatePresence>
 
       <div className="min-h-screen relative flex flex-col w-full">
+        {/* Global Particle Noise Overlay */}
+        <svg className="pointer-events-none fixed isolate z-[99999] opacity-[0.03] mix-blend-overlay w-full h-full">
+          <filter id="noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noise)" />
+        </svg>
+
+        <CustomCursor />
+
             {/* Sophisticated, muted radial background glows */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(140,90,250,0.08),transparent)] pointer-events-none -z-20" />
             <div className="absolute top-[80vh] right-0 w-[60vw] h-[60vh] bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.03),transparent_70%)] pointer-events-none -z-20" />
@@ -216,29 +234,30 @@ export default function App() {
                 height: '100%', 
                 position: 'absolute', 
                 overflow: 'hidden', 
-                pointerEvents: 'none', 
                 zIndex: 0,
                 opacity: route.tab === "project" ? 0.85 : 0.25,
                 transition: "opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)"
               }}
             >
-              <Ferrofluid
-                colors={['#8B5CF6', '#C084FC', '#F3E8FF']}
-                speed={0.4}
-                scale={1.5}
-                turbulence={0.9}
-                fluidity={0.12}
-                rimWidth={0.25}
-                sharpness={2.2}
-                shimmer={1.2}
-                glow={1.8}
-                flowDirection="down"
-                opacity={1}
-                mouseInteraction
-                mouseStrength={1}
-                mouseRadius={0.35}
-                paused={showSplash}
-              />
+              {!shouldReduceMotion && (
+                <Ferrofluid
+                  colors={['#8B5CF6', '#C084FC', '#F3E8FF']}
+                  speed={0.4}
+                  scale={1.5}
+                  turbulence={0.9}
+                  fluidity={0.12}
+                  rimWidth={0.25}
+                  sharpness={2.2}
+                  shimmer={1.2}
+                  glow={1.8}
+                  flowDirection="down"
+                  opacity={1}
+                  mouseInteraction
+                  mouseStrength={1}
+                  mouseRadius={0.35}
+                  paused={showSplash}
+                />
+              )}
             </div>
 
             {/* Render header targeting the dynamically monitored active tab */}
@@ -274,23 +293,42 @@ export default function App() {
                     <div className="flex flex-col w-full relative">
                       <Home onNavigate={navigateToRoute} showSplash={showSplash} />
                       
-                      {/* Premium separator line */}
-                      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none">
-                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
+                      {/* Atmospheric separator */}
+                      <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">
+                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[#7B2FBE]/30 to-transparent" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#CC00FF]/40 blur-[1px] animate-pulse" />
                       </div>
 
                       <Work onNavigate={navigateToRoute} />
 
-                      {/* Premium separator line */}
-                      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none">
-                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
+                      {/* Atmospheric separator */}
+                      <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">
+                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[#7B2FBE]/30 to-transparent" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#CC00FF]/40 blur-[1px] animate-pulse" />
+                      </div>
+
+                      <Process />
+
+                      {/* Atmospheric separator */}
+                      <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">
+                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[#7B2FBE]/30 to-transparent" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#CC00FF]/40 blur-[1px] animate-pulse" />
                       </div>
 
                       <About />
 
-                      {/* Premium separator line */}
-                      <div className="w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-none">
-                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-purple-500/10 to-transparent" />
+                      {/* Atmospheric separator */}
+                      <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">
+                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[#7B2FBE]/30 to-transparent" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#CC00FF]/40 blur-[1px] animate-pulse" />
+                      </div>
+
+                      <Testimonials />
+
+                      {/* Atmospheric separator */}
+                      <div className="w-full h-24 sm:h-32 relative flex items-center justify-center pointer-events-none opacity-60">
+                        <div className="absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[#7B2FBE]/30 to-transparent" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#CC00FF]/40 blur-[1px] animate-pulse" />
                       </div>
 
                       <Contact />
@@ -351,51 +389,51 @@ export default function App() {
                 {/* Separator line */}
                 <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#CC00FF]/10 to-transparent my-1" />
 
-                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-[#A78BCA]/60">
+                <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-6 text-[#A78BCA]/60">
                   {/* Left Column: Social Links */}
-                  <div className="flex items-center space-x-6">
+                  <div className="flex items-center space-x-3">
                     <a 
                       href="https://github.com/revolover00/" 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="hover:text-white transition-colors duration-200"
+                      className="p-2.5 rounded-lg border border-transparent hover:border-[#CC00FF]/30 hover:bg-[#CC00FF]/10 text-[#A78BCA]/80 hover:text-white transition-all duration-300 pointer-events-auto"
                       aria-label="GitHub"
                     >
-                      <Github size={15} />
+                      <Github size={16} />
                     </a>
                     <a 
                       href="https://x.com/revo_codes" 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="hover:text-white transition-colors duration-200"
+                      className="p-2.5 rounded-lg border border-transparent hover:border-[#CC00FF]/30 hover:bg-[#CC00FF]/10 text-[#A78BCA]/80 hover:text-white transition-all duration-300 pointer-events-auto"
                       aria-label="X (Twitter)"
                     >
-                      <Twitter size={15} />
+                      <Twitter size={16} />
                     </a>
                     <a 
                       href="https://www.linkedin.com/in/revo-code-6181283b5" 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="hover:text-white transition-colors duration-190"
+                      className="p-2.5 rounded-lg border border-transparent hover:border-[#CC00FF]/30 hover:bg-[#CC00FF]/10 text-[#A78BCA]/80 hover:text-white transition-all duration-300 pointer-events-auto"
                       aria-label="LinkedIn"
                     >
-                      <Linkedin size={15} />
+                      <Linkedin size={16} />
                     </a>
                     <a 
                       href="https://www.youtube.com/@Revo-code" 
                       target="_blank" 
                       rel="noreferrer" 
-                      className="hover:text-white transition-colors duration-200"
+                      className="p-2.5 rounded-lg border border-transparent hover:border-[#CC00FF]/30 hover:bg-[#CC00FF]/10 text-[#A78BCA]/80 hover:text-white transition-all duration-300 pointer-events-auto"
                       aria-label="YouTube"
                     >
-                      <Youtube size={15} />
+                      <Youtube size={16} />
                     </a>
                   </div>
 
                   {/* Right Column: Copyright */}
                   <div className="flex flex-wrap items-center justify-center gap-4">
-                    <div className="font-mono text-[10px] tracking-wider uppercase text-[#A78BCA]/45">
-                      © {new Date().getFullYear()} Baldwin Portfolio. MIT
+                    <div className="font-mono text-[10px] tracking-widest uppercase text-[#A78BCA]/60">
+                      © {new Date().getFullYear()} Baldwin Portfolio. All rights reserved.
                     </div>
                     <span className="text-[#A78BCA]/20 hidden sm:inline">•</span>
                     <div className="flex space-x-3 text-[10px] font-mono tracking-wider uppercase text-[#A78BCA]/45">

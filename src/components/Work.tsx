@@ -11,6 +11,10 @@ interface WorkProps {
 export default function Work({ onNavigate }: WorkProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const categories = ["All", ...Array.from(new Set(projects.map(p => p.category)))].filter(Boolean);
+  const filteredProjects = activeCategory === "All" ? projects : projects.filter(p => p.category === activeCategory);
 
   useEffect(() => {
     let active = true;
@@ -56,7 +60,7 @@ export default function Work({ onNavigate }: WorkProps) {
           className="w-12 h-12 rounded-full border-4 animate-spin border-t-transparent" 
           style={{ borderColor: "rgba(123,47,190,0.2)", borderTopColor: "#CC00FF" }}
         />
-        <p className="text-xs font-mono mt-4 uppercase tracking-widest text-[#6B4F8A]">
+        <p className="text-xs font-mono mt-4 uppercase tracking-widest text-[#A78BCA]">
           Retrieving Entities...
         </p>
       </div>
@@ -70,7 +74,7 @@ export default function Work({ onNavigate }: WorkProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex items-center space-x-3 mb-6 sm:mb-10"
+        className="flex items-center space-x-3 mb-6 sm:mb-8"
       >
         <div 
           className="p-1.5 sm:p-2.5 rounded-lg"
@@ -87,6 +91,29 @@ export default function Work({ onNavigate }: WorkProps) {
           </p>
         </div>
       </motion.div>
+
+      {/* Category Tabs */}
+      {categories.length > 1 && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-wrap items-center gap-2 mb-8 sm:mb-12"
+        >
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300 border ${
+                activeCategory === cat 
+                  ? "bg-[#CC00FF]/20 border-[#CC00FF]/50 text-white" 
+                  : "bg-white/5 border-white/10 text-[#A78BCA] hover:bg-white/10 hover:text-[#E8D5F5]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </motion.div>
+      )}
 
       {projects.length === 0 ? (
         <motion.div
@@ -112,20 +139,15 @@ export default function Work({ onNavigate }: WorkProps) {
           animate="visible"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8"
         >
-          {projects.map((project) => (
+          {filteredProjects.map((project) => (
             <motion.div
               key={project.id}
               variants={itemVariants}
               whileHover={{ 
                 y: -8,
-                boxShadow: "0 25px 55px -10px rgba(204, 0, 255, 0.35), 0 0 25px 2px rgba(204, 0, 255, 0.18)"
               }}
               whileTap={{ scale: 0.96 }}
-              className="group/card rounded-xl border flex flex-col overflow-hidden relative backdrop-blur-sm cursor-pointer transition-all duration-500 ease-out"
-              style={{
-                backgroundColor: "rgba(10, 0, 16, 0.8)",
-                borderColor: "rgba(123, 47, 190, 0.2)",
-              }}
+              className="group/card rounded-xl gothic-card flex flex-col cursor-pointer"
               onClick={() => onNavigate(`#project/${project.id}`)}
             >
               {/* Card Media Preview */}
@@ -139,7 +161,7 @@ export default function Work({ onNavigate }: WorkProps) {
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center">
-                    <Video size={30} className="text-[#6B4F8A]/30 transition-colors duration-300 group-hover/card:text-[#7B2FBE]/50 sm:w-10 sm:h-10" />
+                    <Video size={30} className="text-[#A78BCA]/30 transition-colors duration-300 group-hover/card:text-[#7B2FBE]/50 sm:w-10 sm:h-10" />
                   </div>
                 )}
                 
@@ -166,7 +188,7 @@ export default function Work({ onNavigate }: WorkProps) {
                 >
                   {project.title}
                 </h3>
-                <p className="text-[9px] sm:text-xs font-mono mb-2 sm:mb-4 text-[#6B4F8A]">
+                <p className="text-[9px] sm:text-xs font-mono mb-2 sm:mb-4 text-[#A78BCA]">
                   {project.subtitle}
                 </p>
                 <p className="text-[11px] sm:text-sm line-clamp-2 sm:line-clamp-3 mb-4 sm:mb-6 flex-grow" style={{ color: "#A78BCA" }}>
@@ -207,13 +229,6 @@ export default function Work({ onNavigate }: WorkProps) {
                 </div>
               </div>
 
-              {/* Radiant inner floating neon glow effect that activates smoothly on hover */}
-              <div 
-                className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(204,0,255,0.15)_0%,transparent_75%)] pointer-events-none z-10"
-              />
-
-              {/* Decorative premium hover border highlight with animated magenta/purple outline */}
-              <div className="absolute inset-0 border border-white/0 group-hover/card:border-[#CC00FF]/30 rounded-xl transition-colors pointer-events-none duration-500 z-30" />
             </motion.div>
           ))}
         </motion.div>

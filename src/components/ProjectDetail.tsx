@@ -47,7 +47,7 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
           className="w-12 h-12 rounded-full border-4 animate-spin border-t-transparent" 
           style={{ borderColor: "rgba(123,47,190,0.2)", borderTopColor: "#CC00FF" }}
         />
-        <p className="text-xs font-mono mt-4 uppercase tracking-widest text-[#6B4F8A]">
+        <p className="text-xs font-mono mt-4 uppercase tracking-widest text-[#A78BCA]">
           Initializing Stream...
         </p>
       </motion.div>
@@ -61,18 +61,23 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
         animate={{ opacity: 1 }}
         className="min-h-[85vh] flex flex-col items-center justify-center p-6 text-center selection:bg-purple-500/30 selection:text-[#E8D5F5]"
       >
-        <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-[#E8D5F5]">
-          Entity Not Found
-        </h2>
-        <p className="text-sm max-w-sm mb-6 text-[#A78BCA]">
-          The project identifier does not correlate with any active entry in Baldwin's core storage.
-        </p>
-        <button
-          onClick={() => onNavigate("#work")}
-          className="text-sm font-mono font-bold uppercase tracking-wider underline text-purple-400 hover:text-[#E8D5F5] transition-colors"
-        >
-          Return to Selected Work
-        </button>
+        <div className="gothic-card rounded-2xl p-8 sm:p-12 shadow-2xl flex flex-col items-center max-w-md w-full">
+          <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mb-6">
+            <span className="text-red-500 font-display font-black text-2xl">404</span>
+          </div>
+          <h2 className="text-2xl font-black uppercase tracking-tight mb-2 text-[#E8D5F5] font-display">
+            Entity Not Found
+          </h2>
+          <p className="text-sm max-w-sm mb-8 text-[#A78BCA] leading-relaxed">
+            The project identifier does not correlate with any active entry in Baldwin's core storage.
+          </p>
+          <button
+            onClick={() => onNavigate("#work")}
+            className="px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all cursor-pointer bg-white/5 border border-white/20 text-white hover:bg-white/10 hover:border-white/30"
+          >
+            Return to Directory
+          </button>
+        </div>
       </motion.div>
     );
   }
@@ -106,7 +111,7 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
             <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform sm:w-4 sm:h-4" />
             <span>Back to Work</span>
           </button>
-          <div className="text-[8px] sm:text-[10px] font-mono tracking-widest text-[#6B4F8A]/60 uppercase overflow-hidden text-ellipsis whitespace-nowrap max-w-[100px] sm:max-w-none">
+          <div className="text-[8px] sm:text-[10px] font-mono tracking-widest text-[#A78BCA]/60 uppercase overflow-hidden text-ellipsis whitespace-nowrap max-w-[100px] sm:max-w-none">
             ID_#{project.id.toUpperCase()}
           </div>
         </div>
@@ -193,11 +198,7 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
           <div className="md:col-span-4 space-y-6 sm:space-y-8">
             {/* Tech details card */}
             <div 
-              className="p-4 sm:p-6 rounded-xl border space-y-4 sm:space-y-5"
-              style={{
-                borderColor: "rgba(123, 47, 190, 0.15)",
-                backgroundColor: "rgba(10, 0, 16, 0.7)"
-              }}
+              className="gothic-card p-4 sm:p-6 rounded-xl space-y-4 sm:space-y-5"
             >
               <h4 className="text-[10px] sm:text-xs font-mono font-bold tracking-widest uppercase text-[#E8D5F5]">
                 METRICS & TECH SPECS
@@ -205,7 +206,7 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
               
               <div className="space-y-3 sm:space-y-4">
                 <div>
-                  <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#6B4F8A] block mb-1 sm:mb-1.5">
+                  <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#A78BCA] block mb-1 sm:mb-1.5">
                     Engineered With:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -228,7 +229,7 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
                 <div className="h-px" style={{ backgroundColor: "rgba(123, 47, 190, 0.15)" }} />
 
                 <div>
-                  <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#6B4F8A] block mb-1">
+                  <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#A78BCA] block mb-1">
                     Environment Deployment:
                   </span>
                   <div className="flex items-center space-x-1.5 text-[10px] sm:text-xs font-mono text-[#E8D5F5]">
@@ -267,17 +268,34 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
 
         {/* Gallery detailing */}
         {project.gallery && project.gallery.length > 0 && (
-          <section className="space-y-6 pt-6">
-            <h3 className="text-lg font-bold tracking-wider uppercase border-b pb-2 flex items-center space-x-2" style={{ color: "#E8D5F5", borderColor: "rgba(123, 47, 190, 0.15)" }}>
+          <section className="space-y-6 pt-6 pb-20">
+            <h3 className="text-lg font-bold tracking-wider uppercase border-b pb-2 flex items-center space-x-2 font-display" style={{ color: "#E8D5F5", borderColor: "rgba(123, 47, 190, 0.15)" }}>
               <LayoutGrid size={16} className="text-[#CC00FF]" />
               <span>Project Interface Mockups</span>
             </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.15 }
+                }
+              }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
               {project.gallery.map((imgUrl, i) => (
-                <div 
+                <motion.div 
                   key={i}
-                  className="rounded-xl border spill-hidden aspect-video overflow-hidden transition-all duration-300 group hover:border-[#CC00FF]/50 relative"
+                  variants={{
+                    hidden: { opacity: 0, y: 30 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  className="rounded-xl border aspect-video overflow-hidden transition-all duration-300 group hover:border-[#CC00FF]/50 relative shadow-lg cursor-pointer"
                   style={{
                     borderColor: "rgba(123, 47, 190, 0.2)",
                     backgroundColor: "rgba(10, 0, 16, 0.9)"
@@ -287,12 +305,12 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
                     src={imgUrl} 
                     alt={`${project.title} Interface ${i + 1}`}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-102"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-[#0A0010]/20 opacity-100 group-hover:opacity-0 transition-opacity" />
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </section>
         )}
 

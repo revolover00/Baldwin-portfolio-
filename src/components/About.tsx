@@ -174,6 +174,19 @@ function CountUp({ value }: { value: string }) {
 }
 
 export default function About() {
+  const [githubRepos, setGithubRepos] = useState<string>("24+");
+
+  useEffect(() => {
+    fetch("https://api.github.com/users/revo-code")
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.public_repos) {
+          setGithubRepos(`${data.public_repos}+`);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const skillCategories = [
     {
       title: "Frontend Architecture",
@@ -208,7 +221,7 @@ export default function About() {
   ];
 
   const stats = [
-    { label: "GitHub Repos", value: "24+" },
+    { label: "GitHub Repos", value: githubRepos },
     { label: "Primary Stack", value: "TypeScript" },
     { label: "Deployments", value: "Vercel" },
     { label: "Approach", value: "AI-powered builds" }
@@ -294,11 +307,7 @@ export default function About() {
                 boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
               }}
               whileTap={{ scale: 0.98 }}
-              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
-              style={{
-                backgroundColor: "rgba(10, 0, 16, 0.8)",
-                borderColor: "rgba(123, 47, 190, 0.2)"
-              }}
+              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl gothic-card flex flex-col items-center justify-center text-center group/card cursor-pointer"
             >
               <div className="p-3 sm:p-5 rounded-full mb-3 sm:mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(255, 255, 255, 0.08)" }}>
                 <Github size={28} className="sm:w-11 sm:h-11" style={{ color: "#ffffff" }} />
@@ -329,11 +338,7 @@ export default function About() {
                 boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
               }}
               whileTap={{ scale: 0.98 }}
-              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
-              style={{
-                backgroundColor: "rgba(10, 0, 16, 0.8)",
-                borderColor: "rgba(123, 47, 190, 0.2)"
-              }}
+              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl gothic-card flex flex-col items-center justify-center text-center group/card cursor-pointer"
             >
               <div className="p-3 sm:p-5 rounded-full mb-3 sm:mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(0, 119, 181, 0.1)" }}>
                 <Linkedin size={28} className="sm:w-11 sm:h-11" style={{ color: "#0077B5" }} />
@@ -364,11 +369,7 @@ export default function About() {
                 boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
               }}
               whileTap={{ scale: 0.98 }}
-              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
-              style={{
-                backgroundColor: "rgba(10, 0, 16, 0.8)",
-                borderColor: "rgba(123, 47, 190, 0.2)"
-              }}
+              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl gothic-card flex flex-col items-center justify-center text-center group/card cursor-pointer"
             >
               <div className="p-3 sm:p-5 rounded-full mb-3 sm:mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}>
                 <Youtube size={28} className="sm:w-11 sm:h-11" style={{ color: "#FF0000" }} />
@@ -399,11 +400,7 @@ export default function About() {
                 boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.32), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
               }}
               whileTap={{ scale: 0.98 }}
-              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl border flex flex-col items-center justify-center text-center transition-all duration-500 ease-out group/card cursor-pointer relative overflow-hidden"
-              style={{
-                backgroundColor: "rgba(10, 0, 16, 0.8)",
-                borderColor: "rgba(123, 47, 190, 0.2)"
-              }}
+              className="p-5 sm:p-8 rounded-xl sm:rounded-2xl gothic-card flex flex-col items-center justify-center text-center group/card cursor-pointer"
             >
               <div className="p-3 sm:p-5 rounded-full mb-3 sm:mb-4 transition-all duration-500 group-hover/card:scale-105 z-20" style={{ backgroundColor: "rgba(255, 255, 255, 0.05)" }}>
                 <Twitter size={28} className="sm:w-11 sm:h-11" style={{ color: "#E8D5F5" }} />
@@ -468,11 +465,7 @@ export default function About() {
                   boxShadow: "0 22px 50px -10px rgba(204, 0, 255, 0.3), 0 0 20px 2px rgba(204, 0, 255, 0.15)"
                 }}
                 whileTap={{ scale: 0.98 }}
-                className="p-4 sm:p-6 rounded-xl sm:rounded-2xl border cursor-pointer select-none group/card relative overflow-hidden transition-all duration-500 ease-out"
-                style={{
-                  backgroundColor: "rgba(10, 0, 16, 0.8)",
-                  borderColor: "rgba(123, 47, 190, 0.2)"
-                }}
+                className="p-4 sm:p-6 rounded-xl sm:rounded-2xl gothic-card cursor-pointer select-none group/card"
               >
                 <div className="flex items-center space-x-2.5 mb-3 sm:mb-4 z-20 relative">
                   {React.cloneElement(category.icon as React.ReactElement, { size: 14, className: "sm:w-4.5 sm:h-4.5" })}

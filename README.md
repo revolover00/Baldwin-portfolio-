@@ -35,7 +35,6 @@ A dark fantasy developer portfolio built with React + TypeScript. Featuring WebG
 ## ✨ Features &nbsp; ![Features](https://img.shields.io/badge/Features-Rich-CC00FF?style=for-the-badge)
 
 - **Hash-based SPA routing** (no React Router) — `#home`, `#work`, `#about`, `#contact`, `#project/:id`
-- **Background video hero** with forced autoplay for iOS/mobile compatibility
 - **HTML5 Canvas ember particle system** (purple/magenta floating particles)
 - **Floating monospace code snippets** drifting upward with Framer Motion
 - **Ferrofluid WebGL interactive background shader** on subpages (using `ogl` library)
@@ -174,10 +173,12 @@ WITH CHECK (true);
 ## ⚠️ Known Issues &nbsp; ![Issues](https://img.shields.io/badge/Known_Issues-Review-7B2FBE?style=for-the-badge)
 
 > ⚠️ **IMPORTANT DEVELOPMENT ACCENTS**
-> - **Asset Requirements:** `logo.webp` and `bg-video.mp4` contain tailored branding and need to be placed manually inside the `/public/` assets directory before compiling as they are git-ignored.
-> - **Contact Rate Limiting:** The contact messaging cooldown period is configured at 60 seconds stored inside `localStorage` for responsive debugging, which should be scaled to a 5-hour limit for final deployment.
-> - **Unused Package Engine:** The `@google/genai` library is currently fully installed in dependencies but remains unused in layouts; it can easily be pruned from packaging.
-> - **Shader Rendering Limits:** The interactive WebGL Ferrofluid shader relies on modern browser canvas configurations and might not render smoothly across all legacy mobile engines (no fallback gradient is programmed).
+> - **Asset Requirements:** `logo.webp` contains tailored branding and needs to be placed manually inside the `/public/` assets directory before compiling as it is git-ignored. (A text fallback will render gracefully if absent).
+
+### ✅ Recently Resolved
+- **Contact Rate Limiting:** Cooldown is correctly set to a production-safe 5 hours to prevent spam.
+- **Shader Mobile Fallback:** The WebGL Ferrofluid shader now correctly disables itself and falls back to performing gradient blobs on viewports under `1024px` to preserve mobile performance.
+- **AI-Studio Template Artifacts:** Leftover Gemini capabilities and env blanks have been removed to keep dependencies lean.
 
 ---
 
