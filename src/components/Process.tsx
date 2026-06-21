@@ -136,8 +136,10 @@ export default function Process() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.7, ease: "easeOut", delay: index * 0.1 }}
-                className={`flex flex-col w-full relative ${
-                  index % 2 === 1 ? "translate-y-8 sm:translate-y-16 md:translate-y-24" : "translate-y-0"
+                className={`relative flex flex-col items-center ${
+                  index % 2 === 0 ? "justify-self-end" : "justify-self-start"
+                } w-full max-w-[280px] sm:max-w-md ${
+                  index % 2 === 1 ? "translate-y-16 sm:translate-y-24 md:translate-y-32" : ""
                 } ${
                   index > 1 ? "mt-4 sm:mt-12 md:mt-16" : ""
                 }`}
@@ -168,7 +170,6 @@ export default function Process() {
                     />
                   </div>
                 )}
-
                 {/* THE CORE STEP CARD WITH AMBIENT SCROLL GLOW ("ITS TURN") */}
                 <motion.div 
                   className="gothic-card rounded-xl sm:rounded-2xl p-3 sm:p-6 lg:p-8 flex flex-col group relative z-10 backdrop-blur-md transition-colors duration-300 border shadow-xl overflow-hidden"

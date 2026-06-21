@@ -277,7 +277,7 @@ export default function About() {
           </motion.div>
 
           {/* Side-by-Side on Desktop, Stacked on Mobile */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center mt-6 sm:mt-12 lg:mt-16">
             {/* Baldwin's Photo (Profile Card) */}
             <div className="lg:col-span-4 flex justify-center lg:justify-start">
               <ProfileCard />
@@ -650,31 +650,19 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="relative rounded-2xl overflow-hidden p-[1.5px] select-none"
+          className="relative rounded-2xl overflow-hidden p-[1.5px] select-none border border-[#CC00FF]/15"
           style={{
-            boxShadow: "0 10px 30px rgba(0,0,0,0.5)"
+            boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
+            backgroundColor: "rgba(10, 0, 16, 0.96)"
           }}
         >
-          {/* Rotating glow border effect trailing strictly along the border */}
-          <div className="absolute inset-0 w-[200%] h-[200%] top-[-50%] left-[-50%] pointer-events-none" style={{ zIndex: 0 }}>
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-              className="w-full h-full"
-              style={{
-                background: "conic-gradient(from 0deg, transparent 20%, #CC00FF 38%, #FF00E4 44%, #E8D5F5 48%, #7B2FBE 60%, transparent 80%)",
-                transformOrigin: "center center",
-                filter: "blur(6px) drop-shadow(0 0 10px rgba(204, 0, 255, 0.95))",
-                opacity: 0.95
-              }}
-            />
-          </div>
+          {/* Subtle static ambient gradient for design depth with 0 frame performance cost */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#CC00FF]/10 via-transparent to-[#7B2FBE]/10 opacity-60 pointer-events-none" />
 
           {/* Actual Card content acting as inner mask */}
           <div 
             className="p-8 rounded-[15px] relative"
             style={{
-              backgroundColor: "rgba(10, 0, 16, 0.96)",
               zIndex: 1,
             }}
           >

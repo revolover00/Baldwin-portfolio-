@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
+
+  // High-performance direct motion values that bypass React render cycles completely!
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth springs on-top of motion values for ultra-fluid movement
+  const springX = useSpring(mouseX, { stiffness: 850, damping: 32, mass: 0.1 });
+  const springY = useSpring(mouseY, { stiffness: 850, damping: 32, mass: 0.1 });
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
@@ -17,7 +24,9 @@ export default function CustomCursor() {
     if (!isDesktop) return;
 
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      // Updates the motion values directly, triggering 0 react component renders!
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -50,9 +59,11 @@ export default function CustomCursor() {
   return (
     <motion.div
       className="fixed top-0 left-0 pointer-events-none z-[99999]"
+      style={{
+        x: springX,
+        y: springY,
+      }}
       animate={{
-        x: mousePosition.x,
-        y: mousePosition.y,
         scale: isHovering ? 1.25 : 1,
       }}
       transition={{
