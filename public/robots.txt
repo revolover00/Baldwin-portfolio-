@@ -1,0 +1,9 @@
+# robots.txt
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_/
+
+Sitemap: https://baldwin-portfolio.vercel.app/sitemap.xml

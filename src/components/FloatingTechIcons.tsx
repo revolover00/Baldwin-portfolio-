@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from "react";
-import { useReducedMotion } from "motion/react";
+import { useReducedMotion } from "framer-motion";
 import {
   SiReact,
   SiTypescript,
@@ -67,6 +67,10 @@ interface FloatingIcon {
   rotSpeed: number;
   rotPhase: number;
   maxRotation: number;
+  
+  // Reactive state properties
+  targetPush?: { x: number; y: number };
+  currentPush?: { x: number; y: number };
 }
 
 function buildIcons(count: number): FloatingIcon[] {
@@ -168,29 +172,38 @@ export default function FloatingTechIcons() {
         const distance = Math.hypot(dx, dy);
 
         const radius = isMobile ? 100 : 200;
-        let pushX = 0;
-        let pushY = 0;
         let scale = 1;
         let opacity = 0.12;
         let shadowEffect = "";
+
+        // Track icon-specific target push values for smooth lerp
+        if (!icon.targetPush) {
+          icon.targetPush = { x: 0, y: 0 };
+          icon.currentPush = { x: 0, y: 0 };
+        }
 
         if (distance < radius) {
           const force = (radius - distance) / radius; // 0 to 1
 
           // Gentle escape vector pushing icons away from cursor position beautifully
-          pushX = (dx / (distance || 1)) * (isMobile ? -14 : -32) * force;
-          pushY = (dy / (distance || 1)) * (isMobile ? -14 : -32) * force;
+          icon.targetPush.x = (dx / (distance || 1)) * (isMobile ? -14 : -32) * force;
+          icon.targetPush.y = (dy / (distance || 1)) * (isMobile ? -14 : -32) * force;
 
           scale = 1 + force * 0.4;
           opacity = 0.12 + force * 0.35;
-          
-          // Highly optimized, cheap box-glow representation
           shadowEffect = `drop-shadow(0 0 ${6 * force}px ${icon.color})`;
+        } else {
+          icon.targetPush.x = 0;
+          icon.targetPush.y = 0;
         }
 
+        // Apply ultra-smooth lerp for the push vector (0.1 factor for high precision)
+        icon.currentPush.x += (icon.targetPush.x - icon.currentPush.x) * 0.1;
+        icon.currentPush.y += (icon.targetPush.y - icon.currentPush.y) * 0.1;
+
         // Apply everything inside a SINGLE composite-only 3D transform that gets pushed directly to GPU
-        const finalX = driftX + pushX;
-        const finalY = driftY + pushY;
+        const finalX = driftX + icon.currentPush.x;
+        const finalY = driftY + icon.currentPush.y;
 
         el.style.transform = `translate3d(${finalX}px, ${finalY}px, 0) scale(${scale}) rotate(${rotation}deg)`;
         el.style.top = `${wrappedYVh}vh`; // Keep top updates contained to layout-safe wrapped ranges

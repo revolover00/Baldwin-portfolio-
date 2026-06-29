@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 interface SplashProps {
   onComplete: () => void;
@@ -22,7 +22,7 @@ export default function Splash({ onComplete }: SplashProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.02 }}
       transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-0 z-[9999] bg-[#06010A] flex flex-col items-center justify-center p-6 overflow-hidden select-none pointer-events-none"
+      className="fixed inset-0 z-[9999] bg-[#06010A] flex flex-col items-center justify-center p-6 overflow-hidden pointer-events-none"
       style={{ willChange: "opacity, transform" }}
     >
       {/* 1. Embedded Premium Glowing CSS styles for perfect liquid horizontal gooey dots animation */}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
@@ -10,8 +10,8 @@ export default function CustomCursor() {
   const mouseY = useMotionValue(0);
 
   // Smooth springs on-top of motion values for ultra-fluid movement
-  const springX = useSpring(mouseX, { stiffness: 850, damping: 32, mass: 0.1 });
-  const springY = useSpring(mouseY, { stiffness: 850, damping: 32, mass: 0.1 });
+  const springX = useSpring(mouseX, { stiffness: 950, damping: 45, mass: 0.1 });
+  const springY = useSpring(mouseY, { stiffness: 950, damping: 45, mass: 0.1 });
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
@@ -31,17 +31,8 @@ export default function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
-        target.tagName.toLowerCase() === "button" ||
-        target.tagName.toLowerCase() === "a" ||
-        target.closest("button") ||
-        target.closest("a") ||
-        target.closest(".cursor-pointer")
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
+      const interactiveEl = target.closest("button, a, .cursor-pointer");
+      setIsHovering(!!interactiveEl);
     };
 
     window.addEventListener("mousemove", updateMousePosition);
@@ -51,7 +42,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", updateMousePosition);
       window.removeEventListener("mouseover", handleMouseOver);
     };
-  }, [isDesktop]);
+  }, [isDesktop, mouseX, mouseY]);
 
   // Don't render on mobile to save performance
   if (!isDesktop) return null;

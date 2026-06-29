@@ -1,6 +1,6 @@
 {
   "name": "Baldwin Portfolio",
-  "description": "A high-performance digital portfolio showcasing retro-futuristic audio engineering and hardware-accelerated particle systems",
+  "description": "A high-performance digital portfolio showcasing retro-futuristic audio vibe coding and hardware-accelerated particle systems",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

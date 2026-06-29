@@ -2,18 +2,30 @@ import { supabase, isSupabaseConfigured } from './integrations/supabase/client';
 import type { Message } from './integrations/supabase/types';
 import type { Project } from './types';
 
+// Helper function to escape HTML characters and prevent potential XSS injection attacks
+export function escapeHtml(text: string): string {
+  if (!text) return "";
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // Backward compatibility mapper so the existing UI sections (gallery, skills, subtitle etc) continue to render beautifully!
 const mapToUIProject = (dbProj: any): Project => {
-  if (!dbProj) return dbProj;
+  if (!dbProj) return dbProj as Project;
   return {
     ...dbProj,
+    id: String(dbProj.id),
     subtitle: dbProj.subtitle || dbProj.category || "Web Project",
     detailedDescription: dbProj.detailedDescription || dbProj.caseStudy || dbProj.description || "",
     mediaUrl: dbProj.mediaUrl || dbProj.imageUrl || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2670&auto=format&fit=crop",
     websiteUrl: dbProj.websiteUrl || dbProj.visitUrl || "#",
     gallery: dbProj.gallery || (dbProj.media ? dbProj.media.map((m: any) => m.url) : []),
     skills: dbProj.skills || (dbProj.category ? [dbProj.category] : ["React", "TypeScript", "TailwindCSS", "Framer Motion", "Vite"])
-  };
+  } as Project;
 };
 
 // In-memory cache to handle immediate navigation matching without storing projects in localStorage on the visitor's device
@@ -30,13 +42,17 @@ export const Store = {
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          console.log("Using cached projects from sessionStorage.");
+          if (import.meta.env.DEV) {
+            console.log("Using cached projects from sessionStorage.");
+          }
           memoryProjectsCache = parsed;
           return parsed;
         }
       }
     } catch (e) {
-      console.warn("Failed to read from sessionStorage:", e);
+      if (import.meta.env.DEV) {
+        console.warn("Failed to read from sessionStorage:", e);
+      }
     }
 
     // If Supabase keys are not set up yet, silently fall back to the demo projects
@@ -62,9 +78,13 @@ export const Store = {
         // Cache in sessionStorage for active session duration
         try {
           sessionStorage.setItem("session_projects_cache", JSON.stringify(mapped));
-          console.log("Projects loaded freshly from database and cached in sessionStorage.");
+          if (import.meta.env.DEV) {
+            console.log("Projects loaded freshly from database and cached in sessionStorage.");
+          }
         } catch (e) {
-          console.warn("Failed to write to sessionStorage:", e);
+          if (import.meta.env.DEV) {
+            console.warn("Failed to write to sessionStorage:", e);
+          }
         }
         
         return mapped;
@@ -75,7 +95,9 @@ export const Store = {
       return DEFAULT_PROJECTS;
 
     } catch (e) {
-      console.warn("Supabase fetch failed, falling back to default projects:", e);
+      if (import.meta.env.DEV) {
+        console.warn("Supabase fetch failed, falling back to default projects:", e);
+      }
       memoryProjectsCache = DEFAULT_PROJECTS;
       return DEFAULT_PROJECTS;
     }
@@ -100,7 +122,9 @@ export const Store = {
         }
       }
     } catch (e) {
-      console.warn("Failed to lookup cached project in sessionStorage:", e);
+      if (import.meta.env.DEV) {
+        console.warn("Failed to lookup cached project in sessionStorage:", e);
+      }
     }
 
     // Try fallback
@@ -120,16 +144,21 @@ export const Store = {
 
     const id = Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
     
+    // Explicitly sanitize all incoming fields to protect against HTML injection (XSS attacks)
+    const sanitizedEmail = escapeHtml(msg.senderEmail.trim());
+    const sanitizedSubject = escapeHtml(msg.subject.trim());
+    const sanitizedBody = escapeHtml(msg.body.trim());
+
     // Embed the sender's email directly into the message body content as part of the payload
-    const enhancedBody = `[Sender Email: ${msg.senderEmail}]\n\n${msg.body}`;
+    const enhancedBody = `[Sender Email: ${sanitizedEmail}]\n\n${sanitizedBody}`;
 
     const message: Message = {
       id,
-      senderEmail: msg.senderEmail,
+      senderEmail: sanitizedEmail,
       senderName: 'Guest',
-      subject: msg.subject,
+      subject: sanitizedSubject,
       body: enhancedBody,
-      createdAt: Date.now(),
+      createdAt: String(Date.now()),
     };
 
     const { error } = await supabase.from('messages').insert([message]);
@@ -149,7 +178,7 @@ const DEFAULT_PROJECTS: Project[] = [
     imageUrl: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
     mainMediaType: "image",
     visitUrl: "https://github.com",
-    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 1, // 1 day ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(), // 1 day ago
     skills: ["WebGL", "Three.js", "GLSL", "React Three Fiber", "TypeScript"],
     media: null,
     caseStudy: null
@@ -164,7 +193,7 @@ const DEFAULT_PROJECTS: Project[] = [
     imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2670&auto=format&fit=crop",
     mainMediaType: "image",
     visitUrl: "https://github.com",
-    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 3, // 3 days ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(), // 3 days ago
     skills: ["React", "Gemini SDK", "Node.js", "TailwindCSS", "Framer Motion"],
     media: null,
     caseStudy: null
@@ -179,7 +208,7 @@ const DEFAULT_PROJECTS: Project[] = [
     imageUrl: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2669&auto=format&fit=crop",
     mainMediaType: "image",
     visitUrl: "https://github.com",
-    createdAt: Date.now() - 1000 * 60 * 60 * 24 * 7, // 7 days ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), // 7 days ago
     skills: ["Web Audio API", "HTML5 Canvas", "TailwindCSS", "TypeScript", "React"],
     media: null,
     caseStudy: null

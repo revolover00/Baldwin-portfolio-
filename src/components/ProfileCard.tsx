@@ -1,8 +1,16 @@
 import React from "react";
-import { motion } from "motion/react";
-import { BadgeCheck } from "lucide-react";
+import { motion } from "framer-motion";
+import { BadgeCheck, Github, Linkedin, Youtube, Twitter } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function ProfileCard() {
+  const { t } = useLanguage();
+  const socials = [
+    { icon: Github, href: "https://github.com/revolover00/", color: "#FFFFFF" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/revo-code-6181283b5", color: "#0077B5" },
+    { icon: Youtube, href: "https://www.youtube.com/@Revo-code", color: "#FF0000" },
+    { icon: Twitter, href: "https://x.com/revo_codes", color: "#E8D5F5" },
+  ];
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.94, y: 35 }}
@@ -40,12 +48,12 @@ export default function ProfileCard() {
       />
 
       {/* Profile Card Content Overlay */}
-      <div className="absolute inset-0 flex flex-col justify-end p-8 z-20 select-none pb-12">
+      <div className="absolute inset-0 flex flex-col justify-end p-8 z-20 pb-12 text-left rtl:text-right">
         
         {/* Name and Verified Badge */}
-        <div className="flex items-center space-x-2.5 mb-2">
+        <div className="flex items-center space-x-2.5 rtl:space-x-reverse mb-2">
           <h3 className="text-2xl font-bold tracking-wide text-white font-display">
-            Baldwin
+            {t("about_card_title")}
           </h3>
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -59,9 +67,31 @@ export default function ProfileCard() {
         </div>
 
         {/* Short description */}
-        <p className="text-sm leading-relaxed text-white/70 font-sans">
-          A Full-Stack Vibe Coder crafting high-fidelity digital solutions.
+        <p className="text-sm leading-relaxed text-white/70 font-sans mb-5 font-light">
+          {t("about_card_role")}
         </p>
+
+        {/* Social Icons Integrated */}
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
+          {socials.map((social, idx) => (
+            <motion.a
+              key={idx}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ 
+                scale: 1.2, 
+                color: social.color,
+                filter: `drop-shadow(0 0 8px ${social.color}66)`
+              }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="text-white/40 hover:text-white transition-colors duration-300"
+            >
+              <social.icon size={18} />
+            </motion.a>
+          ))}
+        </div>
 
       </div>
 

@@ -12,7 +12,7 @@ export interface Project {
   imageUrl: string | null;
   mainMediaType: string | null;
   visitUrl: string | null;
-  createdAt: number;
+  createdAt: string;
   media: MediaItem[] | null;
   caseStudy: string | null;
 }
@@ -23,5 +23,5 @@ export interface Message {
   senderName: string;
   subject: string | null;
   body: string | null;
-  createdAt: number;
+  createdAt: string;
 }

@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "../context/LanguageContext";
 
 interface HeaderProps {
   currentTab: string; // e.g. 'home', 'work', 'about', 'quote', or 'project'
@@ -9,12 +11,13 @@ interface HeaderProps {
 
 export default function Header({ currentTab, onNavigate, showSplash }: HeaderProps) {
   const [logoFailed, setLogoFailed] = useState(false);
+  const { t } = useLanguage();
 
   const navItems = [
-    { label: "Home", route: "#home", id: "home" },
-    { label: "Work", route: "#work", id: "work" },
-    { label: "About", route: "#about", id: "about" },
-    { label: "Get Quote", route: "#quote", id: "quote" }
+    { label: t("home"), route: "#home", id: "home" },
+    { label: t("work"), route: "#work", id: "work" },
+    { label: t("about"), route: "#about", id: "about" },
+    { label: t("quote"), route: "#quote", id: "quote" }
   ];
 
   const handleNavClick = (route: string) => {
@@ -36,7 +39,7 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
         {/* Left Side: Logo (src="/logo.webp") */}
         <div 
           onClick={() => handleNavClick("#home")}
-          className="flex items-center cursor-pointer z-10 group flex-1 justify-start h-9 sm:h-14 relative"
+          className="flex items-center cursor-pointer z-10 group justify-start h-9 sm:h-14 relative shrink-0 sm:flex-1"
         >
           {!logoFailed ? (
             !showSplash && (
@@ -58,7 +61,7 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
             )
           ) : (
             /* Premium Fallback Design */
-            <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <span className="text-2xl sm:text-4xl font-black font-display uppercase tracking-wider text-[#CC00FF] [text-shadow:0_0_20px_rgba(204,0,255,0.6)]">
                 B
               </span>
@@ -70,14 +73,14 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
         </div>
 
         {/* Absolute Centered Navigation Links (Visible on both Mobile & Desktop) */}
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center space-x-1 sm:space-x-4 md:space-x-6 z-10">
+        <div className="flex items-center justify-center gap-1 sm:gap-4 md:gap-6 z-10 flex-grow sm:flex-none sm:absolute sm:left-1/2 sm:-translate-x-1/2">
           {navItems.map((item) => {
             const isActive = currentTab === item.id || (item.id === "work" && currentTab === "project");
             return (
               <button
                 key={item.id}
                 onClick={() => handleNavClick(item.route)}
-                className="text-[10px] sm:text-[13px] font-black sm:font-semibold uppercase tracking-widest transition-all duration-300 hover:text-white hover:bg-white/5 rounded-lg px-2 py-1.5 sm:px-4 sm:py-2 cursor-pointer whitespace-nowrap flex flex-col items-center justify-center relative touch-manipulation min-h-[40px]"
+                className="text-[10px] sm:text-[13px] font-black sm:font-semibold uppercase ltr:tracking-widest rtl:tracking-normal transition-all duration-300 hover:text-white hover:bg-white/5 rounded-lg px-2 py-1.5 sm:px-4 sm:py-2 cursor-pointer whitespace-nowrap flex flex-col items-center justify-center relative touch-manipulation min-h-[40px]"
                 style={{
                   color: isActive ? "#E8D5F5" : "#A78BCA",
                   textShadow: "0 1.5px 6px rgba(0, 0, 0, 0.95)"
@@ -121,8 +124,10 @@ export default function Header({ currentTab, onNavigate, showSplash }: HeaderPro
           })}
         </div>
 
-        {/* Right side: Flex balance spacer */}
-        <div className="flex items-center justify-end flex-1" />
+        {/* Right side: Language Switcher */}
+        <div className="flex items-center justify-end z-20 shrink-0 sm:flex-1">
+          <LanguageSwitcher />
+        </div>
       </div>
     </nav>
   );

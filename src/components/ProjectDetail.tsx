@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { ArrowLeft, Globe, BadgeCheck, FileText, LayoutGrid } from "lucide-react";
 import { Store } from "../store";
 import { Project } from "../types";
@@ -207,7 +207,7 @@ export default function ProjectDetail({ projectId, onNavigate }: ProjectDetailPr
               <div className="space-y-3 sm:space-y-4">
                 <div>
                   <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-[#A78BCA] block mb-1 sm:mb-1.5">
-                    Engineered With:
+                    Vibe Coded With:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {project.skills.map(skill => (

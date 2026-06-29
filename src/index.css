@@ -1,10 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Cairo:wght@600;700;800;900&family=Alexandria:wght@700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --font-display: "Syne", sans-serif;
+  --font-sans: "Plus Jakarta Sans", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Sans Arabic", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Syne", "Alexandria", "Cairo", sans-serif;
+  --font-badeen: "Alexandria", "Cairo", sans-serif;
+  --font-yamama: "IBM Plex Sans Arabic", sans-serif;
+}
+
+/* Map Badeen Display and Alyamama so any reference to them uses these beautiful, highly optimized fonts */
+@font-face {
+  font-family: 'Badeen Display';
+  src: local('Alexandria Black'), local('Alexandria-Black'), local('Cairo Black'), local('Cairo-Black'), local('sans-serif');
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: 'Alyamama';
+  src: local('IBM Plex Sans Arabic Light'), local('IBM Plex Sans Arabic'), local('sans-serif');
+  font-weight: 300;
 }
 
 h1, h2, h3, .font-display {
@@ -14,6 +29,17 @@ h1, h2, h3, .font-display {
 body {
   font-weight: 400;
   background-color: #06010A;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+input, textarea {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,0 +1,22 @@
+{
+  "name": "Baldwin Portfolio — Interactive Vibe Coder & Full-Stack Developer",
+  "short_name": "Baldwin Portfolio",
+  "description": "A high-performance digital portfolio showcasing retro-futuristic audio vibe coding and hardware-accelerated particle systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06010A",
+  "theme_color": "#CC00FF",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Work from "./components/Work";
@@ -11,7 +11,7 @@ import Splash from "./components/Splash";
 import Ferrofluid from "./components/Ferrofluid";
 import FloatingTechIcons from "./components/FloatingTechIcons";
 import CustomCursor from "./components/CustomCursor";
-import { Twitter, Linkedin, Youtube, Github } from "lucide-react";
+import SEO from "./components/SEO";
 import { Store } from "./store";
 import Lenis from "lenis";
 
@@ -35,7 +35,9 @@ export default function App() {
   // Pre-load work projects immediately so that they are loaded on any page
   useEffect(() => {
     Store.getProjects().catch((err) => {
-      console.warn("Could not pre-load projects:", err);
+      if (import.meta.env.DEV) {
+        console.warn("Could not pre-load projects:", err);
+      }
     });
   }, []);
 
@@ -79,13 +81,6 @@ export default function App() {
     
     window.location.hash = targetHash;
 
-    // Direct fail-safe unlock
-    const activeLockTimer = setTimeout(() => {
-      if (isProgrammaticScrollRef.current === tab) {
-        isProgrammaticScrollRef.current = null;
-      }
-    }, 1500);
-
     const startTime = Date.now();
     const tryScroll = () => {
       const element = document.getElementById(tab);
@@ -125,13 +120,13 @@ export default function App() {
     // Instantiate Lenis for liquid-smooth momentum navigation physics
     const isMobile = window.innerWidth < 768;
     const lenis = new Lenis({
-      duration: isMobile ? 1.0 : 1.3, // Faster on mobile
+      duration: isMobile ? 1.0 : 1.2, 
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: isMobile ? 0.8 : 1.0, // Subtler on touch
-      touchMultiplier: isMobile ? 1.4 : 1.5,
+      wheelMultiplier: isMobile ? 1.0 : 1.0, 
+      touchMultiplier: isMobile ? 1.5 : 1.8,
       infinite: false,
     });
 
@@ -189,6 +184,9 @@ export default function App() {
     } else {
       const initialHash = window.location.hash.replace("#", "");
       if (initialHash && ["home", "work", "about", "quote"].includes(initialHash)) {
+        if (isProgrammaticScrollRef.current) {
+          return;
+        }
         isProgrammaticScrollRef.current = initialHash;
         const startTime = Date.now();
         const trySyncScroll = () => {
@@ -265,6 +263,7 @@ export default function App() {
         fontFamily: "'Plus Jakarta Sans', sans-serif"
       }}
     >
+      <SEO />
       <AnimatePresence>
         {showSplash && (
           <Splash key="splash" onComplete={() => setShowSplash(false)} />
